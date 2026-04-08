@@ -2,7 +2,9 @@ package com.mycompany.skilltest.web.rest;
 
 import com.mycompany.skilltest.security.AuthoritiesConstants;
 import com.mycompany.skilltest.service.DiscretEvaluationService;
+import com.mycompany.skilltest.service.dto.AnswerCorrectionResultDTO;
 import com.mycompany.skilltest.service.dto.DashboardDTO;
+import com.mycompany.skilltest.service.dto.DiscretEvaluationSessionDTO;
 import com.mycompany.skilltest.service.dto.EvaluationDTO;
 import com.mycompany.skilltest.service.dto.StartDiscretEvaluationDTO;
 import com.mycompany.skilltest.service.dto.SubmitAnswerManagerDTO;
@@ -30,18 +32,18 @@ public class DiscretEvaluationResource {
 
     @PostMapping("/start")
     @Secured({ AuthoritiesConstants.ADMIN, AuthoritiesConstants.RH, AuthoritiesConstants.MANAGER })
-    public ResponseEntity<EvaluationDTO> startEvaluationDiscret(@Valid @RequestBody StartDiscretEvaluationDTO dto) {
+    public ResponseEntity<DiscretEvaluationSessionDTO> startEvaluationDiscret(@Valid @RequestBody StartDiscretEvaluationDTO dto) {
         LOG.debug("REST request to start discreet evaluation");
-        EvaluationDTO result = discretEvaluationService.startEvaluationDiscret(dto);
+        DiscretEvaluationSessionDTO result = discretEvaluationService.startEvaluationDiscret(dto);
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("/submit-answer")
     @Secured({ AuthoritiesConstants.ADMIN, AuthoritiesConstants.MANAGER })
-    public ResponseEntity<Void> submitAnswerManager(@Valid @RequestBody SubmitAnswerManagerDTO dto) {
+    public ResponseEntity<AnswerCorrectionResultDTO> submitAnswerManager(@Valid @RequestBody SubmitAnswerManagerDTO dto) {
         LOG.debug("REST request to submit answer by manager");
-        discretEvaluationService.submitAnswerManager(dto);
-        return ResponseEntity.ok().build();
+        AnswerCorrectionResultDTO result = discretEvaluationService.submitAnswerManager(dto);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/finalize/{evaluationId}")

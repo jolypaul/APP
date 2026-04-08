@@ -1,4 +1,4 @@
-package com.mycompany.skilltest.web.rest;
+﻿package com.mycompany.skilltest.web.rest;
 
 import static com.mycompany.skilltest.domain.EvaluationAsserts.*;
 import static com.mycompany.skilltest.web.rest.TestUtil.createUpdateProxyForBean;
@@ -28,7 +28,6 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -145,7 +144,7 @@ class EvaluationResourceIT {
         }
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void createEvaluation() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
@@ -169,7 +168,7 @@ class EvaluationResourceIT {
         insertedEvaluation = returnedEvaluation;
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void createEvaluationWithExistingId() throws Exception {
         // Create the Evaluation with an existing ID
@@ -187,7 +186,7 @@ class EvaluationResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeCreate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void checkDateEvaluationIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
@@ -204,7 +203,7 @@ class EvaluationResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void checkStatusIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
@@ -221,7 +220,7 @@ class EvaluationResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void checkModeIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
@@ -238,7 +237,7 @@ class EvaluationResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluations() throws Exception {
         // Initialize the database
@@ -275,7 +274,7 @@ class EvaluationResourceIT {
         verify(evaluationRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getEvaluation() throws Exception {
         // Initialize the database
@@ -295,7 +294,7 @@ class EvaluationResourceIT {
             .andExpect(jsonPath("$.statut").value(DEFAULT_STATUT.toString()));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getEvaluationsByIdFiltering() throws Exception {
         // Initialize the database
@@ -310,7 +309,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByDateEvaluationIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -320,7 +319,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("dateEvaluation.equals=" + DEFAULT_DATE_EVALUATION, "dateEvaluation.equals=" + UPDATED_DATE_EVALUATION);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByDateEvaluationIsInShouldWork() throws Exception {
         // Initialize the database
@@ -333,7 +332,7 @@ class EvaluationResourceIT {
         );
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByDateEvaluationIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -343,7 +342,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("dateEvaluation.specified=true", "dateEvaluation.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByStatusIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -353,7 +352,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("status.equals=" + DEFAULT_STATUS, "status.equals=" + UPDATED_STATUS);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByStatusIsInShouldWork() throws Exception {
         // Initialize the database
@@ -363,7 +362,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("status.in=" + DEFAULT_STATUS + "," + UPDATED_STATUS, "status.in=" + UPDATED_STATUS);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByStatusIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -373,7 +372,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("status.specified=true", "status.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByModeIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -383,7 +382,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("mode.equals=" + DEFAULT_MODE, "mode.equals=" + UPDATED_MODE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByModeIsInShouldWork() throws Exception {
         // Initialize the database
@@ -393,7 +392,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("mode.in=" + DEFAULT_MODE + "," + UPDATED_MODE, "mode.in=" + UPDATED_MODE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByModeIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -403,7 +402,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("mode.specified=true", "mode.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByScoreTotalIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -413,7 +412,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("scoreTotal.equals=" + DEFAULT_SCORE_TOTAL, "scoreTotal.equals=" + UPDATED_SCORE_TOTAL);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByScoreTotalIsInShouldWork() throws Exception {
         // Initialize the database
@@ -426,7 +425,7 @@ class EvaluationResourceIT {
         );
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByScoreTotalIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -436,7 +435,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("scoreTotal.specified=true", "scoreTotal.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByScoreTotalIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
@@ -449,7 +448,7 @@ class EvaluationResourceIT {
         );
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByScoreTotalIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
@@ -462,7 +461,7 @@ class EvaluationResourceIT {
         );
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByScoreTotalIsLessThanSomething() throws Exception {
         // Initialize the database
@@ -472,7 +471,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("scoreTotal.lessThan=" + UPDATED_SCORE_TOTAL, "scoreTotal.lessThan=" + DEFAULT_SCORE_TOTAL);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByScoreTotalIsGreaterThanSomething() throws Exception {
         // Initialize the database
@@ -482,7 +481,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("scoreTotal.greaterThan=" + SMALLER_SCORE_TOTAL, "scoreTotal.greaterThan=" + DEFAULT_SCORE_TOTAL);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByStatutIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -492,7 +491,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("statut.equals=" + DEFAULT_STATUT, "statut.equals=" + UPDATED_STATUT);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByStatutIsInShouldWork() throws Exception {
         // Initialize the database
@@ -502,7 +501,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("statut.in=" + DEFAULT_STATUT + "," + UPDATED_STATUT, "statut.in=" + UPDATED_STATUT);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByStatutIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -512,7 +511,7 @@ class EvaluationResourceIT {
         defaultEvaluationFiltering("statut.specified=true", "statut.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByEmployeeIsEqualToSomething() throws Exception {
         Employee employee;
@@ -534,7 +533,7 @@ class EvaluationResourceIT {
         defaultEvaluationShouldNotBeFound("employeeId.equals=" + (employeeId + 1));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByTestIsEqualToSomething() throws Exception {
         Test test;
@@ -556,7 +555,7 @@ class EvaluationResourceIT {
         defaultEvaluationShouldNotBeFound("testId.equals=" + (testId + 1));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllEvaluationsByManagerIsEqualToSomething() throws Exception {
         Employee manager;
@@ -626,14 +625,14 @@ class EvaluationResourceIT {
             .andExpect(content().string("0"));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getNonExistingEvaluation() throws Exception {
         // Get the evaluation
         restEvaluationMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putExistingEvaluation() throws Exception {
         // Initialize the database
@@ -667,7 +666,7 @@ class EvaluationResourceIT {
         assertPersistedEvaluationToMatchAllProperties(updatedEvaluation);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putNonExistingEvaluation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -689,7 +688,7 @@ class EvaluationResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putWithIdMismatchEvaluation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -711,7 +710,7 @@ class EvaluationResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putWithMissingIdPathParamEvaluation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -729,7 +728,7 @@ class EvaluationResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void partialUpdateEvaluationWithPatch() throws Exception {
         // Initialize the database
@@ -764,7 +763,7 @@ class EvaluationResourceIT {
         );
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void fullUpdateEvaluationWithPatch() throws Exception {
         // Initialize the database
@@ -798,7 +797,7 @@ class EvaluationResourceIT {
         assertEvaluationUpdatableFieldsEquals(partialUpdatedEvaluation, getPersistedEvaluation(partialUpdatedEvaluation));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void patchNonExistingEvaluation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -820,7 +819,7 @@ class EvaluationResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void patchWithIdMismatchEvaluation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -842,7 +841,7 @@ class EvaluationResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void patchWithMissingIdPathParamEvaluation() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -860,7 +859,7 @@ class EvaluationResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void deleteEvaluation() throws Exception {
         // Initialize the database

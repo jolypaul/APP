@@ -119,11 +119,27 @@
   border-radius: 1rem !important;
   padding: 2rem !important;
   text-align: center;
+  .result-accent--success,
   .result-score {
     font-size: 4rem;
     font-weight: 800;
     line-height: 1;
     margin: 1rem 0;
+  }
+  .result-accent--success,
+  .result-score--success,
+  .result-status--success {
+    color: #10b981;
+  }
+  .result-accent--warning,
+  .result-score--warning,
+  .result-status--warning {
+    color: #f59e0b;
+  }
+  .result-accent--danger,
+  .result-score--danger,
+  .result-status--danger {
+    color: #ef4444;
   }
   .result-status {
     display: inline-block;
@@ -132,5 +148,14 @@
     font-weight: 700;
     font-size: 1rem;
     margin-top: 0.5rem;
+  }
+  .result-status--success {
+    background: rgba(16, 185, 129, 0.1);
+  }
+  .result-status--warning {
+    background: rgba(245, 158, 11, 0.1);
+  }
+  .result-status--danger {
+    background: rgba(239, 68, 68, 0.1);
   }
 }

@@ -37,4 +37,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 
     @Query("select employee from Employee employee left join fetch employee.poste where employee.id =:id")
     Optional<Employee> findOneWithToOneRelationships(@Param("id") Long id);
+
+    Optional<Employee> findOneByEmailIgnoreCase(String email);
 }

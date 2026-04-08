@@ -1,4 +1,4 @@
-package com.mycompany.skilltest.web.rest;
+﻿package com.mycompany.skilltest.web.rest;
 
 import static com.mycompany.skilltest.domain.CompetenceAsserts.*;
 import static com.mycompany.skilltest.web.rest.TestUtil.createUpdateProxyForBean;
@@ -21,7 +21,6 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
@@ -115,7 +114,7 @@ class CompetenceResourceIT {
         }
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void createCompetence() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
@@ -139,7 +138,7 @@ class CompetenceResourceIT {
         insertedCompetence = returnedCompetence;
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void createCompetenceWithExistingId() throws Exception {
         // Create the Competence with an existing ID
@@ -157,7 +156,7 @@ class CompetenceResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeCreate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void checkNomIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
@@ -174,7 +173,7 @@ class CompetenceResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void checkNiveauAttenduIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
@@ -191,7 +190,7 @@ class CompetenceResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetences() throws Exception {
         // Initialize the database
@@ -209,7 +208,7 @@ class CompetenceResourceIT {
             .andExpect(jsonPath("$.[*].niveauAttendu").value(hasItem(DEFAULT_NIVEAU_ATTENDU.toString())));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getCompetence() throws Exception {
         // Initialize the database
@@ -227,7 +226,7 @@ class CompetenceResourceIT {
             .andExpect(jsonPath("$.niveauAttendu").value(DEFAULT_NIVEAU_ATTENDU.toString()));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getCompetencesByIdFiltering() throws Exception {
         // Initialize the database
@@ -242,7 +241,7 @@ class CompetenceResourceIT {
         defaultCompetenceFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByNomIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -252,7 +251,7 @@ class CompetenceResourceIT {
         defaultCompetenceFiltering("nom.equals=" + DEFAULT_NOM, "nom.equals=" + UPDATED_NOM);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByNomIsInShouldWork() throws Exception {
         // Initialize the database
@@ -262,7 +261,7 @@ class CompetenceResourceIT {
         defaultCompetenceFiltering("nom.in=" + DEFAULT_NOM + "," + UPDATED_NOM, "nom.in=" + UPDATED_NOM);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByNomIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -272,7 +271,7 @@ class CompetenceResourceIT {
         defaultCompetenceFiltering("nom.specified=true", "nom.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByNomContainsSomething() throws Exception {
         // Initialize the database
@@ -282,7 +281,7 @@ class CompetenceResourceIT {
         defaultCompetenceFiltering("nom.contains=" + DEFAULT_NOM, "nom.contains=" + UPDATED_NOM);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByNomNotContainsSomething() throws Exception {
         // Initialize the database
@@ -292,7 +291,7 @@ class CompetenceResourceIT {
         defaultCompetenceFiltering("nom.doesNotContain=" + UPDATED_NOM, "nom.doesNotContain=" + DEFAULT_NOM);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByCategorieIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -302,7 +301,7 @@ class CompetenceResourceIT {
         defaultCompetenceFiltering("categorie.equals=" + DEFAULT_CATEGORIE, "categorie.equals=" + UPDATED_CATEGORIE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByCategorieIsInShouldWork() throws Exception {
         // Initialize the database
@@ -312,7 +311,7 @@ class CompetenceResourceIT {
         defaultCompetenceFiltering("categorie.in=" + DEFAULT_CATEGORIE + "," + UPDATED_CATEGORIE, "categorie.in=" + UPDATED_CATEGORIE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByCategorieIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -322,7 +321,7 @@ class CompetenceResourceIT {
         defaultCompetenceFiltering("categorie.specified=true", "categorie.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByCategorieContainsSomething() throws Exception {
         // Initialize the database
@@ -332,7 +331,7 @@ class CompetenceResourceIT {
         defaultCompetenceFiltering("categorie.contains=" + DEFAULT_CATEGORIE, "categorie.contains=" + UPDATED_CATEGORIE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByCategorieNotContainsSomething() throws Exception {
         // Initialize the database
@@ -342,7 +341,7 @@ class CompetenceResourceIT {
         defaultCompetenceFiltering("categorie.doesNotContain=" + UPDATED_CATEGORIE, "categorie.doesNotContain=" + DEFAULT_CATEGORIE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByNiveauAttenduIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -352,7 +351,7 @@ class CompetenceResourceIT {
         defaultCompetenceFiltering("niveauAttendu.equals=" + DEFAULT_NIVEAU_ATTENDU, "niveauAttendu.equals=" + UPDATED_NIVEAU_ATTENDU);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByNiveauAttenduIsInShouldWork() throws Exception {
         // Initialize the database
@@ -365,7 +364,7 @@ class CompetenceResourceIT {
         );
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByNiveauAttenduIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -375,7 +374,7 @@ class CompetenceResourceIT {
         defaultCompetenceFiltering("niveauAttendu.specified=true", "niveauAttendu.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByPostesIsEqualToSomething() throws Exception {
         Poste postes;
@@ -397,7 +396,7 @@ class CompetenceResourceIT {
         defaultCompetenceShouldNotBeFound("postesId.equals=" + (postesId + 1));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllCompetencesByTestsIsEqualToSomething() throws Exception {
         Test tests;
@@ -465,14 +464,14 @@ class CompetenceResourceIT {
             .andExpect(content().string("0"));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getNonExistingCompetence() throws Exception {
         // Get the competence
         restCompetenceMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putExistingCompetence() throws Exception {
         // Initialize the database
@@ -504,7 +503,7 @@ class CompetenceResourceIT {
         assertPersistedCompetenceToMatchAllProperties(updatedCompetence);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putNonExistingCompetence() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -526,7 +525,7 @@ class CompetenceResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putWithIdMismatchCompetence() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -548,7 +547,7 @@ class CompetenceResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putWithMissingIdPathParamCompetence() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -566,7 +565,7 @@ class CompetenceResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void partialUpdateCompetenceWithPatch() throws Exception {
         // Initialize the database
@@ -597,7 +596,7 @@ class CompetenceResourceIT {
         );
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void fullUpdateCompetenceWithPatch() throws Exception {
         // Initialize the database
@@ -629,7 +628,7 @@ class CompetenceResourceIT {
         assertCompetenceUpdatableFieldsEquals(partialUpdatedCompetence, getPersistedCompetence(partialUpdatedCompetence));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void patchNonExistingCompetence() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -651,7 +650,7 @@ class CompetenceResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void patchWithIdMismatchCompetence() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -673,7 +672,7 @@ class CompetenceResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void patchWithMissingIdPathParamCompetence() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -691,7 +690,7 @@ class CompetenceResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void deleteCompetence() throws Exception {
         // Initialize the database

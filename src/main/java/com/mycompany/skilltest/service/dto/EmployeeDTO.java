@@ -34,6 +34,12 @@ public class EmployeeDTO implements Serializable {
     @NotNull
     private Role role;
 
+    private Boolean hasUserAccount;
+
+    private Boolean canLogin;
+
+    private String defaultPasswordHint;
+
     private PosteDTO poste;
 
     public Long getId() {
@@ -100,6 +106,30 @@ public class EmployeeDTO implements Serializable {
         this.role = role;
     }
 
+    public Boolean getHasUserAccount() {
+        return hasUserAccount;
+    }
+
+    public void setHasUserAccount(Boolean hasUserAccount) {
+        this.hasUserAccount = hasUserAccount;
+    }
+
+    public Boolean getCanLogin() {
+        return canLogin;
+    }
+
+    public void setCanLogin(Boolean canLogin) {
+        this.canLogin = canLogin;
+    }
+
+    public String getDefaultPasswordHint() {
+        return defaultPasswordHint;
+    }
+
+    public void setDefaultPasswordHint(String defaultPasswordHint) {
+        this.defaultPasswordHint = defaultPasswordHint;
+    }
+
     public PosteDTO getPoste() {
         return poste;
     }
@@ -141,6 +171,9 @@ public class EmployeeDTO implements Serializable {
             ", telephone='" + getTelephone() + "'" +
             ", dateEmbauche='" + getDateEmbauche() + "'" +
             ", role='" + getRole() + "'" +
+            ", hasUserAccount='" + getHasUserAccount() + "'" +
+            ", canLogin='" + getCanLogin() + "'" +
+            ", defaultPasswordHint='" + getDefaultPasswordHint() + "'" +
             ", poste=" + getPoste() +
             "}";
     }

@@ -1,4 +1,4 @@
-package com.mycompany.skilltest.web.rest;
+﻿package com.mycompany.skilltest.web.rest;
 
 import static com.mycompany.skilltest.domain.TestAsserts.*;
 import static com.mycompany.skilltest.web.rest.TestUtil.createUpdateProxyForBean;
@@ -25,7 +25,6 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -142,7 +141,7 @@ class TestResourceIT {
         }
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void createTest() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
@@ -166,7 +165,7 @@ class TestResourceIT {
         insertedTest = returnedTest;
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void createTestWithExistingId() throws Exception {
         // Create the Test with an existing ID
@@ -184,7 +183,7 @@ class TestResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeCreate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void checkTitreIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
@@ -201,7 +200,7 @@ class TestResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void checkModeIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
@@ -218,7 +217,7 @@ class TestResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void checkDateCreationIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
@@ -235,7 +234,7 @@ class TestResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void checkActifIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
@@ -252,7 +251,7 @@ class TestResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTests() throws Exception {
         // Initialize the database
@@ -289,7 +288,7 @@ class TestResourceIT {
         verify(testRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getTest() throws Exception {
         // Initialize the database
@@ -309,7 +308,7 @@ class TestResourceIT {
             .andExpect(jsonPath("$.actif").value(DEFAULT_ACTIF));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getTestsByIdFiltering() throws Exception {
         // Initialize the database
@@ -324,7 +323,7 @@ class TestResourceIT {
         defaultTestFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByTitreIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -334,7 +333,7 @@ class TestResourceIT {
         defaultTestFiltering("titre.equals=" + DEFAULT_TITRE, "titre.equals=" + UPDATED_TITRE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByTitreIsInShouldWork() throws Exception {
         // Initialize the database
@@ -344,7 +343,7 @@ class TestResourceIT {
         defaultTestFiltering("titre.in=" + DEFAULT_TITRE + "," + UPDATED_TITRE, "titre.in=" + UPDATED_TITRE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByTitreIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -354,7 +353,7 @@ class TestResourceIT {
         defaultTestFiltering("titre.specified=true", "titre.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByTitreContainsSomething() throws Exception {
         // Initialize the database
@@ -364,7 +363,7 @@ class TestResourceIT {
         defaultTestFiltering("titre.contains=" + DEFAULT_TITRE, "titre.contains=" + UPDATED_TITRE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByTitreNotContainsSomething() throws Exception {
         // Initialize the database
@@ -374,7 +373,7 @@ class TestResourceIT {
         defaultTestFiltering("titre.doesNotContain=" + UPDATED_TITRE, "titre.doesNotContain=" + DEFAULT_TITRE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByModeIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -384,7 +383,7 @@ class TestResourceIT {
         defaultTestFiltering("mode.equals=" + DEFAULT_MODE, "mode.equals=" + UPDATED_MODE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByModeIsInShouldWork() throws Exception {
         // Initialize the database
@@ -394,7 +393,7 @@ class TestResourceIT {
         defaultTestFiltering("mode.in=" + DEFAULT_MODE + "," + UPDATED_MODE, "mode.in=" + UPDATED_MODE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByModeIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -404,7 +403,7 @@ class TestResourceIT {
         defaultTestFiltering("mode.specified=true", "mode.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByDureeIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -414,7 +413,7 @@ class TestResourceIT {
         defaultTestFiltering("duree.equals=" + DEFAULT_DUREE, "duree.equals=" + UPDATED_DUREE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByDureeIsInShouldWork() throws Exception {
         // Initialize the database
@@ -424,7 +423,7 @@ class TestResourceIT {
         defaultTestFiltering("duree.in=" + DEFAULT_DUREE + "," + UPDATED_DUREE, "duree.in=" + UPDATED_DUREE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByDureeIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -434,7 +433,7 @@ class TestResourceIT {
         defaultTestFiltering("duree.specified=true", "duree.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByDureeIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
@@ -444,7 +443,7 @@ class TestResourceIT {
         defaultTestFiltering("duree.greaterThanOrEqual=" + DEFAULT_DUREE, "duree.greaterThanOrEqual=" + UPDATED_DUREE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByDureeIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
@@ -454,7 +453,7 @@ class TestResourceIT {
         defaultTestFiltering("duree.lessThanOrEqual=" + DEFAULT_DUREE, "duree.lessThanOrEqual=" + SMALLER_DUREE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByDureeIsLessThanSomething() throws Exception {
         // Initialize the database
@@ -464,7 +463,7 @@ class TestResourceIT {
         defaultTestFiltering("duree.lessThan=" + UPDATED_DUREE, "duree.lessThan=" + DEFAULT_DUREE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByDureeIsGreaterThanSomething() throws Exception {
         // Initialize the database
@@ -474,7 +473,7 @@ class TestResourceIT {
         defaultTestFiltering("duree.greaterThan=" + SMALLER_DUREE, "duree.greaterThan=" + DEFAULT_DUREE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByDateCreationIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -484,7 +483,7 @@ class TestResourceIT {
         defaultTestFiltering("dateCreation.equals=" + DEFAULT_DATE_CREATION, "dateCreation.equals=" + UPDATED_DATE_CREATION);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByDateCreationIsInShouldWork() throws Exception {
         // Initialize the database
@@ -497,7 +496,7 @@ class TestResourceIT {
         );
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByDateCreationIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -507,7 +506,7 @@ class TestResourceIT {
         defaultTestFiltering("dateCreation.specified=true", "dateCreation.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByActifIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -517,7 +516,7 @@ class TestResourceIT {
         defaultTestFiltering("actif.equals=" + DEFAULT_ACTIF, "actif.equals=" + UPDATED_ACTIF);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByActifIsInShouldWork() throws Exception {
         // Initialize the database
@@ -527,7 +526,7 @@ class TestResourceIT {
         defaultTestFiltering("actif.in=" + DEFAULT_ACTIF + "," + UPDATED_ACTIF, "actif.in=" + UPDATED_ACTIF);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByActifIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -537,7 +536,7 @@ class TestResourceIT {
         defaultTestFiltering("actif.specified=true", "actif.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllTestsByCompetencesIsEqualToSomething() throws Exception {
         Competence competences;
@@ -607,14 +606,14 @@ class TestResourceIT {
             .andExpect(content().string("0"));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getNonExistingTest() throws Exception {
         // Get the test
         restTestMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putExistingTest() throws Exception {
         // Initialize the database
@@ -644,7 +643,7 @@ class TestResourceIT {
         assertPersistedTestToMatchAllProperties(updatedTest);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putNonExistingTest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -662,7 +661,7 @@ class TestResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putWithIdMismatchTest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -684,7 +683,7 @@ class TestResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putWithMissingIdPathParamTest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -702,7 +701,7 @@ class TestResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void partialUpdateTestWithPatch() throws Exception {
         // Initialize the database
@@ -730,7 +729,7 @@ class TestResourceIT {
         assertTestUpdatableFieldsEquals(createUpdateProxyForBean(partialUpdatedTest, test), getPersistedTest(test));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void fullUpdateTestWithPatch() throws Exception {
         // Initialize the database
@@ -764,7 +763,7 @@ class TestResourceIT {
         assertTestUpdatableFieldsEquals(partialUpdatedTest, getPersistedTest(partialUpdatedTest));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void patchNonExistingTest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -784,7 +783,7 @@ class TestResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void patchWithIdMismatchTest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -806,7 +805,7 @@ class TestResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void patchWithMissingIdPathParamTest() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -824,7 +823,7 @@ class TestResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void deleteTest() throws Exception {
         // Initialize the database

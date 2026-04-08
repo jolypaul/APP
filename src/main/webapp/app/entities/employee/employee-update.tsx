@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Row } from 'react-bootstrap';
 import { Translate, ValidatedField, ValidatedForm, translate } from 'react-jhipster';
 import { Link, useNavigate, useParams } from 'react-router';
+import { toast } from 'react-toastify';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -42,6 +43,15 @@ export const EmployeeUpdate = () => {
 
   useEffect(() => {
     if (updateSuccess) {
+      if (isNew) {
+        if (employeeEntity.canLogin) {
+          toast.success(
+            `Compte créé pour ${employeeEntity.email}. Mot de passe initial: ${employeeEntity.defaultPasswordHint ?? 'motdepasse'}. L'utilisateur peut le changer via Compte > Mot de passe.`,
+          );
+        } else {
+          toast.info(`Le profil ${employeeEntity.email} a été créé sans accès de connexion car son rôle est EMPLOYEE.`);
+        }
+      }
       handleClose();
     }
   }, [updateSuccess]);
@@ -162,6 +172,14 @@ export const EmployeeUpdate = () => {
                   </option>
                 ))}
               </ValidatedField>
+              <Alert variant="secondary">
+                Les profils `ADMIN`, `RH`, `MANAGER` et `EXPERT` re&ccedil;oivent automatiquement un compte de connexion avec
+                l&apos;identifiant &eacute;gal &agrave; l&apos;email et le mot de passe initial `motdepasse`.
+                <br />
+                Le profil `EMPLOYEE` est cr&eacute;&eacute; sans acc&egrave;s de connexion.
+                <br />
+                Un utilisateur connect&eacute; peut changer son mot de passe via le menu Compte &gt; Mot de passe.
+              </Alert>
               <ValidatedField
                 id="employee-poste"
                 name="poste"

@@ -3,6 +3,7 @@ package com.mycompany.skilltest.service.impl;
 import com.mycompany.skilltest.domain.Employee;
 import com.mycompany.skilltest.repository.EmployeeRepository;
 import com.mycompany.skilltest.service.EmployeeService;
+import com.mycompany.skilltest.service.UserService;
 import com.mycompany.skilltest.service.dto.EmployeeDTO;
 import com.mycompany.skilltest.service.mapper.EmployeeMapper;
 import java.util.Optional;
@@ -26,9 +27,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeMapper employeeMapper;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
+    private final UserService userService;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, UserService userService) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
+        this.userService = userService;
     }
 
     @Override
@@ -36,15 +40,22 @@ public class EmployeeServiceImpl implements EmployeeService {
         LOG.debug("Request to save Employee : {}", employeeDTO);
         Employee employee = employeeMapper.toEntity(employeeDTO);
         employee = employeeRepository.save(employee);
-        return employeeMapper.toDto(employee);
+        EmployeeDTO result = employeeMapper.toDto(employee);
+        boolean hasUserAccount = userService.syncUserForEmployee(result, null);
+        enrichAccessInfo(result, hasUserAccount);
+        return result;
     }
 
     @Override
     public EmployeeDTO update(EmployeeDTO employeeDTO) {
         LOG.debug("Request to update Employee : {}", employeeDTO);
+        String previousEmail = employeeRepository.findById(employeeDTO.getId()).map(Employee::getEmail).orElse(null);
         Employee employee = employeeMapper.toEntity(employeeDTO);
         employee = employeeRepository.save(employee);
-        return employeeMapper.toDto(employee);
+        EmployeeDTO result = employeeMapper.toDto(employee);
+        boolean hasUserAccount = userService.syncUserForEmployee(result, previousEmail);
+        enrichAccessInfo(result, hasUserAccount);
+        return result;
     }
 
     @Override
@@ -54,12 +65,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository
             .findById(employeeDTO.getId())
             .map(existingEmployee -> {
+                String previousEmail = existingEmployee.getEmail();
                 employeeMapper.partialUpdate(existingEmployee, employeeDTO);
 
-                return existingEmployee;
+                return new Object[] { existingEmployee, previousEmail };
             })
-            .map(employeeRepository::save)
-            .map(employeeMapper::toDto);
+            .map(tuple -> {
+                Employee savedEmployee = employeeRepository.save((Employee) tuple[0]);
+                EmployeeDTO result = employeeMapper.toDto(savedEmployee);
+                boolean hasUserAccount = userService.syncUserForEmployee(result, (String) tuple[1]);
+                enrichAccessInfo(result, hasUserAccount);
+                return result;
+            });
     }
 
     public Page<EmployeeDTO> findAllWithEagerRelationships(Pageable pageable) {
@@ -70,12 +87,30 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional(readOnly = true)
     public Optional<EmployeeDTO> findOne(Long id) {
         LOG.debug("Request to get Employee : {}", id);
-        return employeeRepository.findOneWithEagerRelationships(id).map(employeeMapper::toDto);
+        return employeeRepository.findOneWithEagerRelationships(id).map(employeeMapper::toDto).map(this::enrichAccessInfo);
     }
 
     @Override
     public void delete(Long id) {
         LOG.debug("Request to delete Employee : {}", id);
+        employeeRepository.findById(id).map(Employee::getEmail).ifPresent(userService::removeUserByLoginOrEmail);
         employeeRepository.deleteById(id);
+    }
+
+    private EmployeeDTO enrichAccessInfo(EmployeeDTO employeeDTO) {
+        return enrichAccessInfo(
+            employeeDTO,
+            employeeDTO.getRole() != null &&
+                employeeDTO.getRole().name() != null &&
+                employeeDTO.getRole() != com.mycompany.skilltest.domain.enumeration.Role.EMPLOYEE
+        );
+    }
+
+    private EmployeeDTO enrichAccessInfo(EmployeeDTO employeeDTO, boolean hasUserAccount) {
+        boolean canLogin = employeeDTO.getRole() != com.mycompany.skilltest.domain.enumeration.Role.EMPLOYEE;
+        employeeDTO.setCanLogin(canLogin);
+        employeeDTO.setHasUserAccount(hasUserAccount && canLogin);
+        employeeDTO.setDefaultPasswordHint(canLogin ? UserService.DEFAULT_EMPLOYEE_PASSWORD : null);
+        return employeeDTO;
     }
 }

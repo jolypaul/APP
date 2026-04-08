@@ -3,11 +3,18 @@ import axios from 'axios';
 
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
+interface IPasswordResetInitResponse {
+  emailSent: boolean;
+  resetLink?: string | null;
+}
+
 const initialState = {
   loading: false,
   resetPasswordSuccess: false,
   resetPasswordFailure: false,
   successMessage: null,
+  emailSent: false,
+  resetLink: null as string | null,
 };
 
 export type PasswordResetState = Readonly<typeof initialState>;
@@ -18,7 +25,7 @@ const apiUrl = 'api/account/reset-password';
 export const handlePasswordResetInit = createAsyncThunk(
   'passwordReset/reset_password_init',
   // If the content-type isn't set that way, axios will try to encode the body and thus modify the data sent to the server.
-  async (mail: string) => axios.post(`${apiUrl}/init`, mail, { headers: { 'Content-Type': 'text/plain' } }),
+  async (mail: string) => axios.post<IPasswordResetInitResponse>(`${apiUrl}/init`, mail, { headers: { 'Content-Type': 'text/plain' } }),
   { serializeError: serializeAxiosError },
 );
 
@@ -38,11 +45,13 @@ export const PasswordResetSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(handlePasswordResetInit.fulfilled, () => ({
+      .addCase(handlePasswordResetInit.fulfilled, (_, action) => ({
         ...initialState,
         loading: false,
         resetPasswordSuccess: true,
         successMessage: 'reset.request.messages.success',
+        emailSent: action.payload.data.emailSent,
+        resetLink: action.payload.data.resetLink ?? null,
       }))
       .addCase(handlePasswordResetFinish.fulfilled, () => ({
         ...initialState,

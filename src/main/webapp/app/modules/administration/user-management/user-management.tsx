@@ -3,7 +3,20 @@ import { Badge, Button, Table } from 'react-bootstrap';
 import { JhiItemCount, JhiPagination, TextFormat, Translate, getPaginationState } from 'react-jhipster';
 import { Link, useLocation, useNavigate } from 'react-router';
 
-import { faEye, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSync, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBan,
+  faCheck,
+  faEye,
+  faPencilAlt,
+  faPlus,
+  faSort,
+  faSortDown,
+  faSortUp,
+  faSync,
+  faToggleOff,
+  faToggleOn,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
@@ -121,7 +134,7 @@ export const UserManagement = () => {
             <th className="hand" onClick={sort('email')}>
               <Translate contentKey="userManagement.email">Email</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('email')} />
             </th>
-            <th />
+            <th>Statut</th>
             <th className="hand" onClick={sort('langKey')}>
               <Translate contentKey="userManagement.langKey">Lang Key</Translate>{' '}
               <FontAwesomeIcon icon={getSortIconByFieldName('langKey')} />
@@ -155,15 +168,27 @@ export const UserManagement = () => {
               <td>{user.login}</td>
               <td>{user.email}</td>
               <td>
-                {user.activated ? (
-                  <Button variant="success" onClick={toggleActive(user)}>
-                    <Translate contentKey="userManagement.activated">Activated</Translate>
-                  </Button>
-                ) : (
-                  <Button variant="danger" onClick={toggleActive(user)}>
-                    <Translate contentKey="userManagement.deactivated">Deactivated</Translate>
-                  </Button>
-                )}
+                <div className="d-flex align-items-center gap-2">
+                  {user.activated ? (
+                    <>
+                      <Badge bg="success" className="d-flex align-items-center gap-1 px-2 py-1" style={{ fontSize: '0.85rem' }}>
+                        <FontAwesomeIcon icon={faCheck} /> Actif
+                      </Badge>
+                      <Button variant="outline-danger" size="sm" onClick={toggleActive(user)} title="Désactiver ce compte">
+                        <FontAwesomeIcon icon={faToggleOn} /> Désactiver
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Badge bg="danger" className="d-flex align-items-center gap-1 px-2 py-1" style={{ fontSize: '0.85rem' }}>
+                        <FontAwesomeIcon icon={faBan} /> Inactif
+                      </Badge>
+                      <Button variant="outline-success" size="sm" onClick={toggleActive(user)} title="Activer ce compte">
+                        <FontAwesomeIcon icon={faToggleOff} /> Activer
+                      </Button>
+                    </>
+                  )}
+                </div>
               </td>
               <td>{user.langKey}</td>
               <td>

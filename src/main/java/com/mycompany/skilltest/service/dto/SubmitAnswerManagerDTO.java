@@ -17,9 +17,6 @@ public class SubmitAnswerManagerDTO implements Serializable {
     @NotNull
     private String contenu;
 
-    @NotNull
-    private Boolean estCorrecte;
-
     private String commentaireManager;
 
     public Long getEvaluationId() {
@@ -44,14 +41,6 @@ public class SubmitAnswerManagerDTO implements Serializable {
 
     public void setContenu(String contenu) {
         this.contenu = contenu;
-    }
-
-    public Boolean getEstCorrecte() {
-        return estCorrecte;
-    }
-
-    public void setEstCorrecte(Boolean estCorrecte) {
-        this.estCorrecte = estCorrecte;
     }
 
     public String getCommentaireManager() {

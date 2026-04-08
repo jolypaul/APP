@@ -7,6 +7,7 @@ import com.mycompany.skilltest.service.MailService;
 import com.mycompany.skilltest.service.UserService;
 import com.mycompany.skilltest.service.dto.AdminUserDTO;
 import com.mycompany.skilltest.service.dto.PasswordChangeDTO;
+import com.mycompany.skilltest.service.dto.PasswordResetInitResponseDTO;
 import com.mycompany.skilltest.web.rest.errors.*;
 import com.mycompany.skilltest.web.rest.vm.KeyAndPasswordVM;
 import com.mycompany.skilltest.web.rest.vm.ManagedUserVM;
@@ -15,6 +16,9 @@ import java.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,10 +44,16 @@ public class AccountResource {
 
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    private final Environment environment;
+
+    @Value("${jhipster.mail.base-url}")
+    private String mailBaseUrl;
+
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, Environment environment) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.environment = environment;
     }
 
     /**
@@ -141,15 +151,22 @@ public class AccountResource {
      * @param mail the mail of the user.
      */
     @PostMapping(path = "/account/reset-password/init")
-    public void requestPasswordReset(@RequestBody String mail) {
+    public PasswordResetInitResponseDTO requestPasswordReset(@RequestBody String mail) {
+        PasswordResetInitResponseDTO response = new PasswordResetInitResponseDTO();
         Optional<User> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
-            mailService.sendPasswordResetMail(user.orElseThrow());
+            User resetUser = user.orElseThrow();
+            boolean emailSent = mailService.sendPasswordResetMailSync(resetUser);
+            response.setEmailSent(emailSent);
+            if (environment.acceptsProfiles(Profiles.of("dev"))) {
+                response.setResetLink(mailBaseUrl + "/account/reset/finish?key=" + resetUser.getResetKey());
+            }
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist
             // but log that an invalid attempt has been made
             LOG.warn("Password reset requested for non existing mail");
         }
+        return response;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.mycompany.skilltest.web.rest;
+﻿package com.mycompany.skilltest.web.rest;
 
 import static com.mycompany.skilltest.domain.QuestionAsserts.*;
 import static com.mycompany.skilltest.web.rest.TestUtil.createUpdateProxyForBean;
@@ -24,7 +24,6 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -141,7 +140,7 @@ class QuestionResourceIT {
         }
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void createQuestion() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
@@ -165,7 +164,7 @@ class QuestionResourceIT {
         insertedQuestion = returnedQuestion;
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void createQuestionWithExistingId() throws Exception {
         // Create the Question with an existing ID
@@ -183,7 +182,7 @@ class QuestionResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeCreate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void checkTypeIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
@@ -200,7 +199,7 @@ class QuestionResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void checkNiveauIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
@@ -217,7 +216,7 @@ class QuestionResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void checkPointsIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
@@ -234,7 +233,7 @@ class QuestionResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestions() throws Exception {
         // Initialize the database
@@ -271,7 +270,7 @@ class QuestionResourceIT {
         verify(questionRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getQuestion() throws Exception {
         // Initialize the database
@@ -291,7 +290,7 @@ class QuestionResourceIT {
             .andExpect(jsonPath("$.reponseAttendue").value(DEFAULT_REPONSE_ATTENDUE));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getQuestionsByIdFiltering() throws Exception {
         // Initialize the database
@@ -306,7 +305,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByTypeIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -316,7 +315,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("type.equals=" + DEFAULT_TYPE, "type.equals=" + UPDATED_TYPE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByTypeIsInShouldWork() throws Exception {
         // Initialize the database
@@ -326,7 +325,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("type.in=" + DEFAULT_TYPE + "," + UPDATED_TYPE, "type.in=" + UPDATED_TYPE);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByTypeIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -336,7 +335,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("type.specified=true", "type.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByNiveauIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -346,7 +345,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("niveau.equals=" + DEFAULT_NIVEAU, "niveau.equals=" + UPDATED_NIVEAU);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByNiveauIsInShouldWork() throws Exception {
         // Initialize the database
@@ -356,7 +355,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("niveau.in=" + DEFAULT_NIVEAU + "," + UPDATED_NIVEAU, "niveau.in=" + UPDATED_NIVEAU);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByNiveauIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -366,7 +365,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("niveau.specified=true", "niveau.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByPointsIsEqualToSomething() throws Exception {
         // Initialize the database
@@ -376,7 +375,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("points.equals=" + DEFAULT_POINTS, "points.equals=" + UPDATED_POINTS);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByPointsIsInShouldWork() throws Exception {
         // Initialize the database
@@ -386,7 +385,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("points.in=" + DEFAULT_POINTS + "," + UPDATED_POINTS, "points.in=" + UPDATED_POINTS);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByPointsIsNullOrNotNull() throws Exception {
         // Initialize the database
@@ -396,7 +395,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("points.specified=true", "points.specified=false");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByPointsIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
@@ -406,7 +405,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("points.greaterThanOrEqual=" + DEFAULT_POINTS, "points.greaterThanOrEqual=" + UPDATED_POINTS);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByPointsIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
@@ -416,7 +415,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("points.lessThanOrEqual=" + DEFAULT_POINTS, "points.lessThanOrEqual=" + SMALLER_POINTS);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByPointsIsLessThanSomething() throws Exception {
         // Initialize the database
@@ -426,7 +425,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("points.lessThan=" + UPDATED_POINTS, "points.lessThan=" + DEFAULT_POINTS);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByPointsIsGreaterThanSomething() throws Exception {
         // Initialize the database
@@ -436,7 +435,7 @@ class QuestionResourceIT {
         defaultQuestionFiltering("points.greaterThan=" + SMALLER_POINTS, "points.greaterThan=" + DEFAULT_POINTS);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getAllQuestionsByTestIsEqualToSomething() throws Exception {
         Test test;
@@ -506,14 +505,14 @@ class QuestionResourceIT {
             .andExpect(content().string("0"));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void getNonExistingQuestion() throws Exception {
         // Get the question
         restQuestionMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putExistingQuestion() throws Exception {
         // Initialize the database
@@ -547,7 +546,7 @@ class QuestionResourceIT {
         assertPersistedQuestionToMatchAllProperties(updatedQuestion);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putNonExistingQuestion() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -569,7 +568,7 @@ class QuestionResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putWithIdMismatchQuestion() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -591,7 +590,7 @@ class QuestionResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void putWithMissingIdPathParamQuestion() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -609,7 +608,7 @@ class QuestionResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void partialUpdateQuestionWithPatch() throws Exception {
         // Initialize the database
@@ -637,7 +636,7 @@ class QuestionResourceIT {
         assertQuestionUpdatableFieldsEquals(createUpdateProxyForBean(partialUpdatedQuestion, question), getPersistedQuestion(question));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void fullUpdateQuestionWithPatch() throws Exception {
         // Initialize the database
@@ -671,7 +670,7 @@ class QuestionResourceIT {
         assertQuestionUpdatableFieldsEquals(partialUpdatedQuestion, getPersistedQuestion(partialUpdatedQuestion));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void patchNonExistingQuestion() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -693,7 +692,7 @@ class QuestionResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void patchWithIdMismatchQuestion() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -715,7 +714,7 @@ class QuestionResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void patchWithMissingIdPathParamQuestion() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
@@ -733,7 +732,7 @@ class QuestionResourceIT {
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @Transactional
     void deleteQuestion() throws Exception {
         // Initialize the database

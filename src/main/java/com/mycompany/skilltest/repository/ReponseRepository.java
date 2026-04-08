@@ -39,4 +39,6 @@ public interface ReponseRepository extends JpaRepository<Reponse, Long>, JpaSpec
     Optional<Reponse> findOneWithToOneRelationships(@Param("id") Long id);
 
     List<Reponse> findByEvaluationId(Long evaluationId);
+
+    Optional<Reponse> findOneByEvaluationIdAndQuestionId(Long evaluationId, Long questionId);
 }

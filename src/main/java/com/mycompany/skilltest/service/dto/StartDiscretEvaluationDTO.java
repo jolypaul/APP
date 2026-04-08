@@ -14,7 +14,6 @@ public class StartDiscretEvaluationDTO implements Serializable {
     @NotNull
     private Long testId;
 
-    @NotNull
     private Long managerId;
 
     public Long getEmployeeId() {

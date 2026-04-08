@@ -12,6 +12,9 @@ export interface IEmployee {
   telephone?: string | null;
   dateEmbauche?: dayjs.Dayjs;
   role?: keyof typeof Role;
+  hasUserAccount?: boolean | null;
+  canLogin?: boolean | null;
+  defaultPasswordHint?: string | null;
   poste?: IPoste | null;
 }
 

@@ -56,7 +56,7 @@ public class MailService {
         sendEmailSync(to, subject, content, isMultipart, isHtml);
     }
 
-    private void sendEmailSync(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
+    private boolean sendEmailSync(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
         LOG.debug(
             "Send email[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
             isMultipart,
@@ -76,8 +76,10 @@ public class MailService {
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
             LOG.debug("Sent email to User '{}'", to);
+            return true;
         } catch (MailException | MessagingException e) {
             LOG.warn("Email could not be sent to user '{}'", to, e);
+            return false;
         }
     }
 
@@ -86,10 +88,10 @@ public class MailService {
         sendEmailFromTemplateSync(user, templateName, titleKey);
     }
 
-    private void sendEmailFromTemplateSync(User user, String templateName, String titleKey) {
+    private boolean sendEmailFromTemplateSync(User user, String templateName, String titleKey) {
         if (user.getEmail() == null) {
             LOG.debug("Email doesn't exist for user '{}'", user.getLogin());
-            return;
+            return false;
         }
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
@@ -97,7 +99,7 @@ public class MailService {
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
-        sendEmailSync(user.getEmail(), subject, content, false, true);
+        return sendEmailSync(user.getEmail(), subject, content, false, true);
     }
 
     @Async
@@ -116,5 +118,10 @@ public class MailService {
     public void sendPasswordResetMail(User user) {
         LOG.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplateSync(user, "mail/passwordResetEmail", "email.reset.title");
+    }
+
+    public boolean sendPasswordResetMailSync(User user) {
+        LOG.debug("Sending password reset email synchronously to '{}'", user.getEmail());
+        return sendEmailFromTemplateSync(user, "mail/passwordResetEmail", "email.reset.title");
     }
 }

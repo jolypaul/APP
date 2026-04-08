@@ -3,11 +3,13 @@ package com.mycompany.skilltest.service;
 import com.mycompany.skilltest.config.Constants;
 import com.mycompany.skilltest.domain.Authority;
 import com.mycompany.skilltest.domain.User;
+import com.mycompany.skilltest.domain.enumeration.Role;
 import com.mycompany.skilltest.repository.AuthorityRepository;
 import com.mycompany.skilltest.repository.UserRepository;
 import com.mycompany.skilltest.security.AuthoritiesConstants;
 import com.mycompany.skilltest.security.SecurityUtils;
 import com.mycompany.skilltest.service.dto.AdminUserDTO;
+import com.mycompany.skilltest.service.dto.EmployeeDTO;
 import com.mycompany.skilltest.service.dto.UserDTO;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -32,6 +34,8 @@ import tech.jhipster.security.RandomUtil;
 public class UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
+
+    public static final String DEFAULT_EMPLOYEE_PASSWORD = "motdepasse";
 
     private final UserRepository userRepository;
 
@@ -146,6 +150,10 @@ public class UserService {
     }
 
     public User createUser(AdminUserDTO userDTO) {
+        return createUser(userDTO, RandomUtil.generatePassword());
+    }
+
+    public User createUser(AdminUserDTO userDTO, String password) {
         User user = new User();
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
@@ -159,7 +167,7 @@ public class UserService {
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
-        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+        String encryptedPassword = passwordEncoder.encode(password);
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
@@ -178,6 +186,61 @@ public class UserService {
         this.clearUserCaches(user);
         LOG.debug("Created Information for User: {}", user);
         return user;
+    }
+
+    public boolean syncUserForEmployee(EmployeeDTO employeeDTO, String previousEmail) {
+        if (employeeDTO.getRole() == Role.EMPLOYEE) {
+            removeUserByLoginOrEmail(previousEmail);
+            removeUserByLoginOrEmail(employeeDTO.getEmail());
+            return false;
+        }
+
+        String normalizedEmail = employeeDTO.getEmail().toLowerCase();
+        Optional<User> existingUser = findManagedUser(previousEmail, normalizedEmail);
+
+        if (existingUser.isPresent()) {
+            User user = existingUser.orElseThrow();
+            clearUserCaches(user);
+            user.setLogin(normalizedEmail);
+            user.setFirstName(employeeDTO.getPrenom());
+            user.setLastName(employeeDTO.getNom());
+            user.setEmail(normalizedEmail);
+            user.setActivated(true);
+            user.setLangKey(user.getLangKey() == null ? Constants.DEFAULT_LANGUAGE : user.getLangKey());
+            user.setAuthorities(resolveAuthoritiesForRole(employeeDTO.getRole()));
+            userRepository.save(user);
+            clearUserCaches(user);
+            return true;
+        }
+
+        AdminUserDTO userDTO = new AdminUserDTO();
+        userDTO.setLogin(normalizedEmail);
+        userDTO.setFirstName(employeeDTO.getPrenom());
+        userDTO.setLastName(employeeDTO.getNom());
+        userDTO.setEmail(normalizedEmail);
+        userDTO.setActivated(true);
+        userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
+        userDTO.setAuthorities(
+            resolveAuthoritiesForRole(employeeDTO.getRole()).stream().map(Authority::getName).collect(Collectors.toSet())
+        );
+
+        createUser(userDTO, DEFAULT_EMPLOYEE_PASSWORD);
+        return true;
+    }
+
+    public void removeUserByLoginOrEmail(String identifier) {
+        if (identifier == null || identifier.isBlank()) {
+            return;
+        }
+
+        userRepository
+            .findOneByLogin(identifier.toLowerCase())
+            .or(() -> userRepository.findOneByEmailIgnoreCase(identifier))
+            .ifPresent(user -> {
+                userRepository.delete(user);
+                clearUserCaches(user);
+                LOG.debug("Deleted User linked to employee: {}", user);
+            });
     }
 
     /**
@@ -313,6 +376,37 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).toList();
+    }
+
+    private Optional<User> findManagedUser(String previousEmail, String currentEmail) {
+        if (previousEmail != null && !previousEmail.isBlank()) {
+            Optional<User> previousUser = userRepository.findOneByEmailIgnoreCase(previousEmail);
+            if (previousUser.isPresent()) {
+                return previousUser;
+            }
+        }
+
+        return userRepository.findOneByEmailIgnoreCase(currentEmail).or(() -> userRepository.findOneByLogin(currentEmail));
+    }
+
+    private Set<Authority> resolveAuthoritiesForRole(Role role) {
+        Set<String> authorityNames = new LinkedHashSet<>();
+        authorityNames.add(AuthoritiesConstants.USER);
+
+        switch (role) {
+            case ADMIN -> authorityNames.add(AuthoritiesConstants.ADMIN);
+            case RH -> authorityNames.add(AuthoritiesConstants.RH);
+            case MANAGER -> authorityNames.add(AuthoritiesConstants.MANAGER);
+            case EXPERT -> authorityNames.add(AuthoritiesConstants.EXPERT);
+            case EMPLOYEE -> authorityNames.add(AuthoritiesConstants.EMPLOYEE);
+        }
+
+        return authorityNames
+            .stream()
+            .map(authorityRepository::findById)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     private void clearUserCaches(User user) {

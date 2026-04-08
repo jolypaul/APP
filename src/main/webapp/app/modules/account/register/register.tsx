@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import { Translate, ValidatedField, ValidatedForm, isEmail, translate } from 'react-jhipster';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 import { toast } from 'react-toastify';
 
@@ -13,6 +13,7 @@ import { handleRegister, reset } from './register.reducer';
 export const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(
     () => () => {
@@ -34,8 +35,9 @@ export const RegisterPage = () => {
   useEffect(() => {
     if (successMessage) {
       toast.success(translate(successMessage));
+      navigate('/login', { replace: true });
     }
-  }, [successMessage]);
+  }, [navigate, successMessage]);
 
   return (
     <div>

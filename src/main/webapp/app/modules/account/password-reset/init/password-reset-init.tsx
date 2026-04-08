@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import { Translate, ValidatedField, ValidatedForm, isEmail, translate } from 'react-jhipster';
+import { Link } from 'react-router';
 
 import { toast } from 'react-toastify';
 
@@ -22,6 +23,8 @@ export const PasswordResetInit = () => {
   };
 
   const successMessage = useAppSelector(state => state.passwordReset.successMessage);
+  const resetLink = useAppSelector(state => state.passwordReset.resetLink);
+  const emailSent = useAppSelector(state => state.passwordReset.emailSent);
 
   useEffect(() => {
     if (successMessage) {
@@ -40,7 +43,19 @@ export const PasswordResetInit = () => {
             <p>
               <Translate contentKey="reset.request.messages.info">Enter the email address you used to register</Translate>
             </p>
+            <p className="mb-0 text-muted">
+              Si aucun SMTP n&apos;est configur&eacute; en d&eacute;veloppement, un lien de r&eacute;initialisation local sera
+              affich&eacute; ici.
+            </p>
           </Alert>
+          {successMessage && !emailSent && resetLink && (
+            <Alert variant="info">
+              <p className="mb-2">Aucun email r&eacute;el n&apos;a pu &ecirc;tre envoy&eacute; depuis l&apos;environnement courant.</p>
+              <Button as={Link as any} to={resetLink.replace('http://127.0.0.1:8080', '')} variant="outline-primary">
+                Ouvrir le lien de r&eacute;initialisation
+              </Button>
+            </Alert>
+          )}
           <ValidatedForm onSubmit={handleValidSubmit}>
             <ValidatedField
               name="email"
