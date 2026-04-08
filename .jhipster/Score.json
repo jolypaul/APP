@@ -1,0 +1,50 @@
+{
+  "annotations": {
+    "changelogDate": "20260407234427"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "valeur",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "pourcentage",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "Statut",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CONFORME,A_AMELIORER,NON_CONFORME"
+    },
+    {
+      "fieldName": "dateCalcul",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Score",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "evaluation",
+      "relationshipName": "evaluation",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "nom",
+      "otherEntityName": "competence",
+      "relationshipName": "competence",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

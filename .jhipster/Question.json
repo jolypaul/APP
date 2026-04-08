@@ -1,0 +1,53 @@
+{
+  "annotations": {
+    "changelogDate": "20260407234424"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "enonce",
+      "fieldType": "TextBlob",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "QuestionType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "QCM,OUVERTE,VRAI_FAUX,PRATIQUE"
+    },
+    {
+      "fieldName": "niveau",
+      "fieldType": "Level",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "DEBUTANT,INTERMEDIAIRE,AVANCE,EXPERT"
+    },
+    {
+      "fieldName": "points",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "choixMultiple",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "reponseAttendue",
+      "fieldType": "TextBlob"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Question",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "titre",
+      "otherEntityName": "test",
+      "relationshipName": "test",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

@@ -1,0 +1,53 @@
+{
+  "annotations": {
+    "changelogDate": "20260407234423"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "titre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "mode",
+      "fieldType": "TestMode",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CLASSIQUE,DISCRET"
+    },
+    {
+      "fieldName": "duree",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "dateCreation",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "actif",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Test",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "nom",
+      "otherEntityName": "competence",
+      "otherEntityRelationshipName": "tests",
+      "relationshipName": "competences",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

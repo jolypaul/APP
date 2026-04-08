@@ -1,0 +1,56 @@
+# docker-compose.yml — root level for easy startup
+# Usage: docker-compose up --build
+name: skilltestapp
+services:
+  app:
+    image: skilltestapp
+    build:
+      context: .
+      dockerfile: src/main/docker/jib/Dockerfile
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/skilltestapp?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://mysql:3306/skilltestapp?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+    ports:
+      - "8080:8080"
+    networks:
+      - skilltest-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/management/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:9.6.0
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./src/main/docker/config/mysql:/etc/mysql/conf.d:ro
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=skilltestapp
+    ports:
+      - "3306:3306"
+    networks:
+      - skilltest-network
+    command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+    healthcheck:
+      test: ['CMD-SHELL', 'mysql -e "SHOW DATABASES;" && sleep 5']
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+networks:
+  skilltest-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local

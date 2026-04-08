@@ -1,0 +1,11 @@
+id;enonce;type;niveau;points;choix_multiple;reponse_attendue
+1;Qu est-ce que l injection de dependance en Spring?;OUVERTE;INTERMEDIAIRE;10;;Mecanisme IoC gerant les dependances entre beans
+2;Quel est le role de @Transactional?;QCM;AVANCE;10;Gestion transactions - Logging - Serialisation - Routing;Gestion transactions
+3;Spring Boot utilise un conteneur d applications embarque. Vrai ou Faux?;VRAI_FAUX;DEBUTANT;5;;Vrai
+4;Expliquez le pattern Repository en DDD;OUVERTE;AVANCE;15;;Interface abstraite pour acces aux donnees du domaine
+5;Quel hook React declenche un effet de bord?;QCM;INTERMEDIAIRE;10;useState - useEffect - useContext - useRef;useEffect
+6;Qu est-ce qu un composant React pur?;OUVERTE;INTERMEDIAIRE;10;;Composant sans effet de bord qui retourne toujours le meme rendu pour les memes props
+7;Ecrivez une requete SQL avec JOIN et GROUP BY;PRATIQUE;AVANCE;15;;SELECT d.nom COUNT(*) FROM dept d JOIN emp e ON d.id=e.dept_id GROUP BY d.nom
+8;Qu est-ce qu un Dockerfile multi-stage?;OUVERTE;INTERMEDIAIRE;10;;Build en plusieurs etapes pour reduire la taille de l image finale
+9;Le rebasing Git reecrit l historique. Vrai ou Faux?;VRAI_FAUX;INTERMEDIAIRE;5;;Vrai
+10;Citez 3 vulnerabilites du OWASP Top 10;OUVERTE;EXPERT;15;;Injection SQL - XSS - Broken Authentication

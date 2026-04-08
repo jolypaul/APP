@@ -1,0 +1,10 @@
+{
+  "skillTestApp": {
+    "Statut": {
+      "null": "",
+      "CONFORME": "CONFORME",
+      "A_AMELIORER": "A_AMELIORER",
+      "NON_CONFORME": "NON_CONFORME"
+    }
+  }
+}

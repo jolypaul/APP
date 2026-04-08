@@ -1,0 +1,11 @@
+{
+  "skillTestApp": {
+    "Level": {
+      "null": "",
+      "DEBUTANT": "DEBUTANT",
+      "INTERMEDIAIRE": "INTERMEDIAIRE",
+      "AVANCE": "AVANCE",
+      "EXPERT": "EXPERT"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "annotations": {
+    "changelogDate": "20260407234421"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "intitule",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "niveauRequis",
+      "fieldType": "Level",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "DEBUTANT,INTERMEDIAIRE,AVANCE,EXPERT"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Poste",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "nom",
+      "otherEntityName": "competence",
+      "otherEntityRelationshipName": "postes",
+      "relationshipName": "competences",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

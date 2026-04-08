@@ -1,0 +1,40 @@
+/*
+* Bootstrap overrides https://v4-alpha.getbootstrap.com/getting-started/options/
+* All values defined in bootstrap source
+* https://github.com/twbs/bootstrap/blob/v4-dev/scss/_variables.scss can be overwritten here
+* Make sure not to add !default to values here
+*/
+
+// Options:
+$enable-rounded: true;
+$enable-shadows: true;
+$enable-gradients: false;
+$enable-transitions: true;
+$enable-hover-media-query: false;
+$enable-grid-classes: true;
+$enable-print-styles: true;
+
+// Components:
+$border-radius: 0.75rem;
+$border-radius-lg: 1rem;
+$border-radius-sm: 0.5rem;
+
+// Colors:
+$primary: #4f46e5;
+$secondary: #64748b;
+$success: #10b981;
+$info: #06b6d4;
+$warning: #f59e0b;
+$danger: #ef4444;
+
+// Body:
+$body-bg: #f1f5f9;
+$body-color: #1e293b;
+
+// Cards:
+$card-border-radius: 1rem;
+$card-cap-padding-y: 1rem;
+
+// Navbar
+$navbar-dark-color: rgba(255, 255, 255, 0.85);
+$navbar-dark-active-color: #fff;

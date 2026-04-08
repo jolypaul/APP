@@ -1,0 +1,141 @@
+
+// =============================================
+// ENUMS
+// =============================================
+
+enum Level {
+    DEBUTANT,
+    INTERMEDIAIRE,
+    AVANCE,
+    EXPERT
+}
+
+enum QuestionType {
+    QCM,
+    OUVERTE,
+    VRAI_FAUX,
+    PRATIQUE
+}
+
+enum Statut {
+    CONFORME,
+    A_AMELIORER,
+    NON_CONFORME
+}
+
+enum Role {
+    ADMIN,
+    RH,
+    MANAGER,
+    EXPERT,
+    EMPLOYEE
+}
+
+enum TestMode {
+    CLASSIQUE,
+    DISCRET
+}
+
+enum EvaluationStatus {
+    EN_COURS,
+    TERMINEE,
+    ANNULEE
+}
+
+// =============================================
+// ENTITIES
+// =============================================
+
+entity Employee {
+    matricule String required unique
+    nom String required
+    prenom String required
+    email String required unique
+    telephone String
+    dateEmbauche LocalDate required
+    role Role required
+}
+
+entity Poste {
+    intitule String required unique
+    description TextBlob
+    niveauRequis Level required
+}
+
+entity Competence {
+    nom String required unique
+    description TextBlob
+    categorie String
+    niveauAttendu Level required
+}
+
+entity Test {
+    titre String required
+    description TextBlob
+    mode TestMode required
+    duree Integer
+    dateCreation Instant required
+    actif Boolean required
+}
+
+entity Question {
+    enonce TextBlob required
+    type QuestionType required
+    niveau Level required
+    points Integer required
+    choixMultiple TextBlob
+    reponseAttendue TextBlob
+}
+
+entity Reponse {
+    contenu TextBlob required
+    estCorrecte Boolean
+    dateReponse Instant required
+    commentaireManager TextBlob
+}
+
+entity Evaluation {
+    dateEvaluation Instant required
+    status EvaluationStatus required
+    mode TestMode required
+    scoreTotal Double
+    remarques TextBlob
+    statut Statut
+}
+
+entity Score {
+    valeur Double required
+    pourcentage Double required
+    statut Statut required
+    dateCalcul Instant required
+}
+
+// =============================================
+// RELATIONS
+// =============================================
+
+relationship ManyToOne {
+    Employee{poste(intitule)} to Poste
+    Question{test(titre)} to Test
+    Reponse{question(enonce)} to Question
+    Reponse{evaluation} to Evaluation
+    Evaluation{employee(nom)} to Employee
+    Evaluation{test(titre)} to Test
+    Evaluation{manager(nom)} to Employee
+    Score{evaluation} to Evaluation
+    Score{competence(nom)} to Competence
+}
+
+relationship ManyToMany {
+    Poste{competences(nom)} to Competence{postes(intitule)}
+    Test{competences(nom)} to Competence{tests(titre)}
+}
+
+// =============================================
+// OPTIONS
+// =============================================
+
+dto * with mapstruct
+service * with serviceImpl
+paginate * with pagination
+filter *

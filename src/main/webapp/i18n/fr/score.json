@@ -1,0 +1,29 @@
+{
+  "skillTestApp": {
+    "score": {
+      "home": {
+        "title": "Scores",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Score",
+        "createOrEditLabel": "Créer ou éditer un Score",
+        "notFound": "Aucun Score trouvé"
+      },
+      "created": "Un nouveau Score a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Score avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Score avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Score {{ id }} ?"
+      },
+      "detail": {
+        "title": "Score"
+      },
+      "id": "ID",
+      "valeur": "Valeur",
+      "pourcentage": "Pourcentage",
+      "statut": "Statut",
+      "dateCalcul": "Date Calcul",
+      "evaluation": "Evaluation",
+      "competence": "Competence"
+    }
+  }
+}

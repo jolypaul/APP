@@ -1,0 +1,97 @@
+import './header.scss';
+
+import React from 'react';
+import { Nav, Navbar } from 'react-bootstrap';
+import { Storage, Translate } from 'react-jhipster';
+
+import LoadingBar from 'react-redux-loading-bar';
+
+import { useAppDispatch } from 'app/config/store';
+import { setLocale } from 'app/shared/reducers/locale';
+import { AccountMenu, AdminMenu, EntitiesMenu, LocaleMenu } from '../menus';
+import { NavLink } from 'react-router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTachometerAlt, faUserSecret, faUsers, faClipboardCheck, faListAlt } from '@fortawesome/free-solid-svg-icons';
+
+import { Brand, Home } from './header-components';
+
+export interface IHeaderProps {
+  isAuthenticated: boolean;
+  isAdmin: boolean;
+  ribbonEnv: string;
+  isInProduction: boolean;
+  isOpenAPIEnabled: boolean;
+  currentLocale: string;
+}
+
+const Header = (props: IHeaderProps) => {
+  const dispatch = useAppDispatch();
+
+  const handleLocaleChange = langKey => {
+    Storage.session.set('locale', langKey);
+    dispatch(setLocale(langKey));
+  };
+
+  const renderDevRibbon = () =>
+    !props.isInProduction && (
+      <div className="ribbon dev">
+        <a href="">
+          <Translate contentKey={`global.ribbon.${props.ribbonEnv}`} />
+        </a>
+      </div>
+    );
+
+  /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
+
+  return (
+    <div id="app-header">
+      {renderDevRibbon()}
+      <LoadingBar className="loading-bar" />
+      <Navbar data-cy="navbar" data-bs-theme="dark" expand="md" fixed="top" className="jh-navbar" collapseOnSelect>
+        <Navbar.Toggle aria-controls="header-tabs" aria-label="Menu" />
+        <Brand />
+        <Navbar.Collapse id="header-tabs">
+          <Nav className="ms-auto">
+            <Home />
+            {props.isAuthenticated && (
+              <Nav.Link as={NavLink} to="/" className="d-flex align-items-center">
+                <FontAwesomeIcon icon={faTachometerAlt} className="me-1" />
+                <span>Dashboard</span>
+              </Nav.Link>
+            )}
+            {props.isAuthenticated && (
+              <Nav.Link as={NavLink} to="/discret-evaluation" className="d-flex align-items-center">
+                <FontAwesomeIcon icon={faUserSecret} className="me-1" />
+                <span>Mode Discret</span>
+              </Nav.Link>
+            )}
+            {props.isAuthenticated && (
+              <Nav.Link as={NavLink} to="/employee" className="d-flex align-items-center">
+                <FontAwesomeIcon icon={faUsers} className="me-1" />
+                <span>Employ&eacute;s</span>
+              </Nav.Link>
+            )}
+            {props.isAuthenticated && (
+              <Nav.Link as={NavLink} to="/evaluation" className="d-flex align-items-center">
+                <FontAwesomeIcon icon={faClipboardCheck} className="me-1" />
+                <span>&Eacute;valuations</span>
+              </Nav.Link>
+            )}
+            {props.isAuthenticated && (
+              <Nav.Link as={NavLink} to="/test" className="d-flex align-items-center">
+                <FontAwesomeIcon icon={faListAlt} className="me-1" />
+                <span>Tests</span>
+              </Nav.Link>
+            )}
+            {props.isAuthenticated && <EntitiesMenu />}
+            {props.isAuthenticated && props.isAdmin && <AdminMenu showOpenAPI={props.isOpenAPIEnabled} />}
+            <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
+            <AccountMenu isAuthenticated={props.isAuthenticated} />
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    </div>
+  );
+};
+
+export default Header;

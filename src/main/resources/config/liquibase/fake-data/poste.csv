@@ -1,0 +1,11 @@
+id;intitule;description;niveau_requis
+1;Developpeur Java Senior;Developpement backend Java Spring Boot;AVANCE
+2;Developpeur Frontend;Developpement React TypeScript;INTERMEDIAIRE
+3;DevOps Engineer;CI/CD Docker Kubernetes;AVANCE
+4;Chef de Projet IT;Gestion de projets informatiques;INTERMEDIAIRE
+5;Architecte Logiciel;Conception architecture logicielle;EXPERT
+6;DBA;Administration bases de donnees;AVANCE
+7;Scrum Master;Facilitation equipe agile;INTERMEDIAIRE
+8;Tech Lead;Lead technique equipe dev;AVANCE
+9;Analyste Securite;Audit et securite applicative;EXPERT
+10;Developpeur Fullstack Junior;Developpement full stack;DEBUTANT

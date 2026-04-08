@@ -1,0 +1,47 @@
+{
+  "annotations": {
+    "changelogDate": "20260407234425"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "contenu",
+      "fieldType": "TextBlob",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "estCorrecte",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "dateReponse",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "commentaireManager",
+      "fieldType": "TextBlob"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Reponse",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "enonce",
+      "otherEntityName": "question",
+      "relationshipName": "question",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "evaluation",
+      "relationshipName": "evaluation",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

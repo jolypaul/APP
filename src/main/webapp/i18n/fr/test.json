@@ -1,0 +1,30 @@
+{
+  "skillTestApp": {
+    "test": {
+      "home": {
+        "title": "Tests",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Test",
+        "createOrEditLabel": "Créer ou éditer un Test",
+        "notFound": "Aucun Test trouvé"
+      },
+      "created": "Un nouveau Test a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Test avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Test avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Test {{ id }} ?"
+      },
+      "detail": {
+        "title": "Test"
+      },
+      "id": "ID",
+      "titre": "Titre",
+      "description": "Description",
+      "mode": "Mode",
+      "duree": "Duree",
+      "dateCreation": "Date Creation",
+      "actif": "Actif",
+      "competences": "Competences"
+    }
+  }
+}

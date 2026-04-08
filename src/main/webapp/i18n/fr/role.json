@@ -1,0 +1,12 @@
+{
+  "skillTestApp": {
+    "Role": {
+      "null": "",
+      "ADMIN": "ADMIN",
+      "RH": "RH",
+      "MANAGER": "MANAGER",
+      "EXPERT": "EXPERT",
+      "EMPLOYEE": "EMPLOYEE"
+    }
+  }
+}

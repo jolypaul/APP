@@ -1,0 +1,11 @@
+id;nom;description;categorie;niveau_attendu
+1;Java;Programmation Java et ecosysteme Spring;Backend;AVANCE
+2;React;Developpement frontend avec React;Frontend;INTERMEDIAIRE
+3;SQL;Gestion de bases de donnees relationnelles;Base de donnees;AVANCE
+4;Docker;Conteneurisation et orchestration;DevOps;INTERMEDIAIRE
+5;Git;Controle de version et collaboration;Outils;INTERMEDIAIRE
+6;REST API;Conception et implementation API REST;Architecture;AVANCE
+7;Securite;Securite applicative OWASP;Securite;EXPERT
+8;Agile Scrum;Methodologie agile et ceremonies Scrum;Gestion de projet;INTERMEDIAIRE
+9;CI/CD;Integration et deploiement continu;DevOps;AVANCE
+10;TypeScript;Programmation TypeScript;Frontend;INTERMEDIAIRE

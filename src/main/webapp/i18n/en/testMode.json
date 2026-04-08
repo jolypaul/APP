@@ -1,0 +1,9 @@
+{
+  "skillTestApp": {
+    "TestMode": {
+      "null": "",
+      "CLASSIQUE": "CLASSIQUE",
+      "DISCRET": "DISCRET"
+    }
+  }
+}

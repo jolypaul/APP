@@ -1,0 +1,29 @@
+{
+  "skillTestApp": {
+    "competence": {
+      "home": {
+        "title": "Competences",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Competence",
+        "createOrEditLabel": "Créer ou éditer un Competence",
+        "notFound": "Aucun Competence trouvé"
+      },
+      "created": "Un nouveau Competence a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Competence avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Competence avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Competence {{ id }} ?"
+      },
+      "detail": {
+        "title": "Competence"
+      },
+      "id": "ID",
+      "nom": "Nom",
+      "description": "Description",
+      "categorie": "Categorie",
+      "niveauAttendu": "Niveau Attendu",
+      "postes": "Postes",
+      "tests": "Tests"
+    }
+  }
+}

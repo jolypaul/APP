@@ -1,0 +1,7 @@
+export enum Statut {
+  CONFORME = 'CONFORME',
+
+  A_AMELIORER = 'A_AMELIORER',
+
+  NON_CONFORME = 'NON_CONFORME',
+}

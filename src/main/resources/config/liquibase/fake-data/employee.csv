@@ -1,0 +1,11 @@
+id;matricule;nom;prenom;email;telephone;date_embauche;role
+1;EMP001;Dupont;Jean;jean.dupont@company.com;+33 612345678;2020-03-15;MANAGER
+2;EMP002;Martin;Sophie;sophie.martin@company.com;+33 623456789;2019-06-01;EMPLOYEE
+3;EMP003;Bernard;Pierre;pierre.bernard@company.com;+33 634567890;2021-01-10;EMPLOYEE
+4;EMP004;Durand;Marie;marie.durand@company.com;+33 645678901;2018-09-20;RH
+5;EMP005;Leroy;Thomas;thomas.leroy@company.com;+33 656789012;2022-02-14;EMPLOYEE
+6;EMP006;Moreau;Claire;claire.moreau@company.com;+33 667890123;2020-11-05;EXPERT
+7;EMP007;Laurent;Marc;marc.laurent@company.com;+33 678901234;2017-04-18;MANAGER
+8;EMP008;Simon;Anne;anne.simon@company.com;+33 689012345;2021-07-22;EMPLOYEE
+9;EMP009;Michel;Luc;luc.michel@company.com;+33 690123456;2019-12-03;EMPLOYEE
+10;EMP010;Garcia;Laura;laura.garcia@company.com;+33 601234567;2023-01-09;ADMIN

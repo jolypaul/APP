@@ -1,0 +1,11 @@
+id;titre;description;mode;duree;date_creation;actif
+1;Test Java Spring Boot;Evaluation competences Java et Spring;CLASSIQUE;60;2026-01-15T09:00:00;true
+2;Test React Frontend;Evaluation competences React;CLASSIQUE;45;2026-01-20T10:00:00;true
+3;Test DevOps Docker;Evaluation Docker et CI/CD;DISCRET;30;2026-02-01T14:00:00;true
+4;Test SQL Avance;Evaluation SQL et optimisation;CLASSIQUE;40;2026-02-10T09:00:00;true
+5;Test Securite OWASP;Evaluation securite applicative;DISCRET;50;2026-02-15T11:00:00;true
+6;Test Agile Scrum;Evaluation methodologie agile;CLASSIQUE;30;2026-03-01T09:00:00;true
+7;Test Architecture;Evaluation architecture logicielle;DISCRET;60;2026-03-10T14:00:00;true
+8;Test Git Avance;Evaluation controle de version;CLASSIQUE;25;2026-03-15T10:00:00;true
+9;Test TypeScript;Evaluation TypeScript;CLASSIQUE;35;2026-03-20T09:00:00;true
+10;Test Full Stack;Evaluation complete full stack;DISCRET;90;2026-04-01T09:00:00;true

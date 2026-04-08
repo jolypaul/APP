@@ -1,0 +1,67 @@
+{
+  "annotations": {
+    "changelogDate": "20260407234426"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "dateEvaluation",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "EvaluationStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EN_COURS,TERMINEE,ANNULEE"
+    },
+    {
+      "fieldName": "mode",
+      "fieldType": "TestMode",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CLASSIQUE,DISCRET"
+    },
+    {
+      "fieldName": "scoreTotal",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "remarques",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "Statut",
+      "fieldValues": "CONFORME,A_AMELIORER,NON_CONFORME"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Evaluation",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "nom",
+      "otherEntityName": "employee",
+      "relationshipName": "employee",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "titre",
+      "otherEntityName": "test",
+      "relationshipName": "test",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "nom",
+      "otherEntityName": "employee",
+      "relationshipName": "manager",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}
