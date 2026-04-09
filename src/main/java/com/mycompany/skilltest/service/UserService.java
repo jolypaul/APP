@@ -89,11 +89,27 @@ public class UserService {
         return userRepository
             .findOneByEmailIgnoreCase(mail)
             .filter(User::isActivated)
+            .filter(user ->
+                user
+                    .getAuthorities()
+                    .stream()
+                    .anyMatch(a -> AuthoritiesConstants.ADMIN.equals(a.getName()))
+            )
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(Instant.now());
                 this.clearUserCaches(user);
                 return user;
+            });
+    }
+
+    public void adminResetPassword(String login, String newPassword) {
+        userRepository
+            .findOneByLogin(login)
+            .ifPresent(user -> {
+                user.setPassword(passwordEncoder.encode(newPassword));
+                this.clearUserCaches(user);
+                LOG.debug("Admin reset password for user: {}", login);
             });
     }
 

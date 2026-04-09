@@ -7,6 +7,7 @@ import {
   faBan,
   faCheck,
   faEye,
+  faKey,
   faPencilAlt,
   faPlus,
   faSort,
@@ -18,6 +19,7 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -93,6 +95,21 @@ export const UserManagement = () => {
         activated: !user.activated,
       }),
     );
+  };
+
+  const handleResetPassword = async (login: string) => {
+    const newPassword = window.prompt(`Nouveau mot de passe pour "${login}" :`);
+    if (!newPassword) return;
+    if (newPassword.length < 4) {
+      window.alert('Le mot de passe doit contenir au moins 4 caractères.');
+      return;
+    }
+    try {
+      await axios.post(`/api/admin/users/${login}/reset-password`, { newPassword });
+      window.alert(`Mot de passe de "${login}" réinitialisé avec succès.`);
+    } catch {
+      window.alert('Erreur lors de la réinitialisation du mot de passe.');
+    }
   };
 
   const account = useAppSelector(state => state.authentication.account);
@@ -216,6 +233,9 @@ export const UserManagement = () => {
                     <span className="d-none d-md-inline">
                       <Translate contentKey="entity.action.edit">Edit</Translate>
                     </span>
+                  </Button>
+                  <Button variant="warning" size="sm" onClick={() => handleResetPassword(user.login)} title="Réinitialiser le mot de passe">
+                    <FontAwesomeIcon icon={faKey} /> <span className="d-none d-md-inline">Mot de passe</span>
                   </Button>
                   <Button
                     as={Link as any}

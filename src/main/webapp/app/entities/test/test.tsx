@@ -100,7 +100,7 @@ export const Test = () => {
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="skillTestApp.test.home.refreshListLabel">Refresh List</Translate>
           </Button>
-          <Link to="/test/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+          <Link to="/test-builder" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
             <FontAwesomeIcon icon="plus" />
             &nbsp;
             <Translate contentKey="skillTestApp.test.home.createLabel">Create new Test</Translate>
@@ -165,13 +165,7 @@ export const Test = () => {
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
-                      <Button
-                        as={Link as any}
-                        to={`/test/${test.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                        variant="primary"
-                        size="sm"
-                        data-cy="entityEditButton"
-                      >
+                      <Button as={Link as any} to={`/test-builder/${test.id}`} variant="primary" size="sm" data-cy="entityEditButton">
                         <FontAwesomeIcon icon="pencil-alt" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.edit">Edit</Translate>

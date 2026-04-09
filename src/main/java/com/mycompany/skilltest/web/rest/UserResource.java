@@ -205,4 +205,26 @@ public class UserResource {
         userService.deleteUser(login);
         return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, "userManagement.deleted", login)).build();
     }
+
+    /**
+     * {@code POST /admin/users/:login/reset-password} : Admin resets a user's password.
+     *
+     * @param login the login of the user whose password to reset.
+     * @param newPassword the new password.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
+     */
+    @PostMapping("/users/{login}/reset-password")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<Void> resetUserPassword(
+        @PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login,
+        @RequestBody Map<String, String> body
+    ) {
+        LOG.debug("REST request to reset password for User: {}", login);
+        String newPassword = body.get("newPassword");
+        if (newPassword == null || newPassword.length() < 4 || newPassword.length() > 100) {
+            return ResponseEntity.badRequest().build();
+        }
+        userService.adminResetPassword(login, newPassword);
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert(applicationName, "userManagement.passwordReset", login)).build();
+    }
 }

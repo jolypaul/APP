@@ -13,7 +13,7 @@ import { Authority } from 'app/shared/jhipster/constants';
 import { AccountMenu, AdminMenu, LocaleMenu } from '../menus';
 import { NavLink } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTachometerAlt, faUserSecret, faUsers, faClipboardCheck, faListAlt, faCogs } from '@fortawesome/free-solid-svg-icons';
+import { faTachometerAlt, faUsers, faClipboardCheck, faListAlt, faCogs } from '@fortawesome/free-solid-svg-icons';
 
 import { Brand, Home } from './header-components';
 
@@ -56,20 +56,14 @@ const Header = (props: IHeaderProps) => {
             )}
             {props.isAuthenticated && has(Authority.ADMIN, Authority.MANAGER) && (
               <Nav.Link as={NavLink} to="/discret-evaluation" className="d-flex align-items-center">
-                <FontAwesomeIcon icon={faUserSecret} className="me-1" />
-                <span>Mode Discret</span>
+                <FontAwesomeIcon icon={faClipboardCheck} className="me-1" />
+                <span>&Eacute;valuations</span>
               </Nav.Link>
             )}
             {props.isAuthenticated && has(Authority.ADMIN, Authority.RH) && (
               <Nav.Link as={NavLink} to="/employee" className="d-flex align-items-center">
                 <FontAwesomeIcon icon={faUsers} className="me-1" />
                 <span>Employ&eacute;s</span>
-              </Nav.Link>
-            )}
-            {props.isAuthenticated && has(Authority.ADMIN, Authority.MANAGER, Authority.EXPERT) && (
-              <Nav.Link as={NavLink} to="/evaluation" className="d-flex align-items-center">
-                <FontAwesomeIcon icon={faClipboardCheck} className="me-1" />
-                <span>&Eacute;valuations</span>
               </Nav.Link>
             )}
             {props.isAuthenticated && has(Authority.ADMIN, Authority.MANAGER) && (

@@ -10,6 +10,7 @@ import Login from 'app/modules/login/login';
 import Logout from 'app/modules/login/logout';
 import Dashboard from 'app/modules/dashboard/dashboard';
 import DiscretEvaluation from 'app/modules/discret-evaluation/discret-evaluation';
+import TestBuilder from 'app/modules/test-builder/test-builder';
 import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import PageNotFound from 'app/shared/error/page-not-found';
@@ -66,6 +67,22 @@ const AppRoutes = () => {
             element={
               <PrivateRoute hasAnyAuthorities={[Authority.ADMIN, Authority.MANAGER]}>
                 <DiscretEvaluation />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="test-builder"
+            element={
+              <PrivateRoute hasAnyAuthorities={[Authority.ADMIN, Authority.MANAGER]}>
+                <TestBuilder />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="test-builder/:id"
+            element={
+              <PrivateRoute hasAnyAuthorities={[Authority.ADMIN, Authority.MANAGER]}>
+                <TestBuilder />
               </PrivateRoute>
             }
           />

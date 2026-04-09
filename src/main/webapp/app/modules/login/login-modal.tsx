@@ -1,7 +1,6 @@
 import React from 'react';
 import { Alert, Button, Col, Form, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'react-bootstrap';
 import { Translate, ValidatedField, translate } from 'react-jhipster';
-import { Link } from 'react-router';
 
 import { type FieldError, useForm } from 'react-hook-form';
 
@@ -82,19 +81,6 @@ const LoginModal = (props: ILoginModalProps) => {
             </Col>
           </Row>
           <div className="mt-1">&nbsp;</div>
-          <Alert variant="warning">
-            <Link to="/account/reset/request" data-cy="forgetYourPasswordSelector">
-              <Translate contentKey="login.password.forgot">Did you forget your password?</Translate>
-            </Link>
-          </Alert>
-          <Alert variant="warning">
-            <span>
-              <Translate contentKey="global.messages.info.register.noaccount">You don&apos;t have an account yet?</Translate>
-            </span>{' '}
-            <Link to="/account/register">
-              <Translate contentKey="global.messages.info.register.link">Register a new account</Translate>
-            </Link>
-          </Alert>
         </ModalBody>
         <ModalFooter>
           <Button variant="secondary" onClick={handleClose} tabIndex={1}>

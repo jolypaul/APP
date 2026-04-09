@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
+import { Authority } from 'app/shared/jhipster/constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 
@@ -26,6 +28,9 @@ export const Reponse = () => {
   const reponseList = useAppSelector(state => state.reponse.entities);
   const loading = useAppSelector(state => state.reponse.loading);
   const totalItems = useAppSelector(state => state.reponse.totalItems);
+  const account = useAppSelector(state => state.authentication.account);
+  const authorities: string[] = account?.authorities ?? [];
+  const isManager = hasAnyAuthority(authorities, [Authority.MANAGER]) && !hasAnyAuthority(authorities, [Authority.ADMIN]);
 
   const getAllEntities = () => {
     dispatch(
@@ -119,10 +124,12 @@ export const Reponse = () => {
                   <Translate contentKey="skillTestApp.reponse.contenu">Contenu</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('contenu')} />
                 </th>
-                <th className="hand" onClick={sort('estCorrecte')}>
-                  <Translate contentKey="skillTestApp.reponse.estCorrecte">Est Correcte</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('estCorrecte')} />
-                </th>
+                {!isManager && (
+                  <th className="hand" onClick={sort('estCorrecte')}>
+                    <Translate contentKey="skillTestApp.reponse.estCorrecte">Est Correcte</Translate>{' '}
+                    <FontAwesomeIcon icon={getSortIconByFieldName('estCorrecte')} />
+                  </th>
+                )}
                 <th className="hand" onClick={sort('dateReponse')}>
                   <Translate contentKey="skillTestApp.reponse.dateReponse">Date Reponse</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('dateReponse')} />
@@ -149,7 +156,7 @@ export const Reponse = () => {
                     </Button>
                   </td>
                   <td>{reponse.contenu}</td>
-                  <td>{reponse.estCorrecte ? 'true' : 'false'}</td>
+                  {!isManager && <td>{reponse.estCorrecte ? 'true' : 'false'}</td>}
                   <td>{reponse.dateReponse ? <TextFormat type="date" value={reponse.dateReponse} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{reponse.commentaireManager}</td>
                   <td>{reponse.question ? <Link to={`/question/${reponse.question.id}`}>{reponse.question.enonce}</Link> : ''}</td>

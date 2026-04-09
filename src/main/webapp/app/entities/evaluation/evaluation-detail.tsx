@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
+import { Authority } from 'app/shared/jhipster/constants';
 
 import { getEntity } from './evaluation.reducer';
 
@@ -20,6 +22,9 @@ export const EvaluationDetail = () => {
   }, []);
 
   const evaluationEntity = useAppSelector(state => state.evaluation.entity);
+  const account = useAppSelector(state => state.authentication.account);
+  const authorities: string[] = account?.authorities ?? [];
+  const isManager = hasAnyAuthority(authorities, [Authority.MANAGER]) && !hasAnyAuthority(authorities, [Authority.ADMIN]);
   return (
     <Row>
       <Col md="8">
@@ -55,12 +60,16 @@ export const EvaluationDetail = () => {
             </span>
           </dt>
           <dd>{evaluationEntity.mode}</dd>
-          <dt>
-            <span id="scoreTotal">
-              <Translate contentKey="skillTestApp.evaluation.scoreTotal">Score Total</Translate>
-            </span>
-          </dt>
-          <dd>{evaluationEntity.scoreTotal}</dd>
+          {!isManager && (
+            <>
+              <dt>
+                <span id="scoreTotal">
+                  <Translate contentKey="skillTestApp.evaluation.scoreTotal">Score Total</Translate>
+                </span>
+              </dt>
+              <dd>{evaluationEntity.scoreTotal}</dd>
+            </>
+          )}
           <dt>
             <span id="remarques">
               <Translate contentKey="skillTestApp.evaluation.remarques">Remarques</Translate>

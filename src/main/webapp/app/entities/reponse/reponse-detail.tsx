@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
+import { Authority } from 'app/shared/jhipster/constants';
 
 import { getEntity } from './reponse.reducer';
 
@@ -20,6 +22,9 @@ export const ReponseDetail = () => {
   }, []);
 
   const reponseEntity = useAppSelector(state => state.reponse.entity);
+  const account = useAppSelector(state => state.authentication.account);
+  const authorities: string[] = account?.authorities ?? [];
+  const isManager = hasAnyAuthority(authorities, [Authority.MANAGER]) && !hasAnyAuthority(authorities, [Authority.ADMIN]);
   return (
     <Row>
       <Col md="8">
@@ -39,12 +44,16 @@ export const ReponseDetail = () => {
             </span>
           </dt>
           <dd>{reponseEntity.contenu}</dd>
-          <dt>
-            <span id="estCorrecte">
-              <Translate contentKey="skillTestApp.reponse.estCorrecte">Est Correcte</Translate>
-            </span>
-          </dt>
-          <dd>{reponseEntity.estCorrecte ? 'true' : 'false'}</dd>
+          {!isManager && (
+            <>
+              <dt>
+                <span id="estCorrecte">
+                  <Translate contentKey="skillTestApp.reponse.estCorrecte">Est Correcte</Translate>
+                </span>
+              </dt>
+              <dd>{reponseEntity.estCorrecte ? 'true' : 'false'}</dd>
+            </>
+          )}
           <dt>
             <span id="dateReponse">
               <Translate contentKey="skillTestApp.reponse.dateReponse">Date Reponse</Translate>

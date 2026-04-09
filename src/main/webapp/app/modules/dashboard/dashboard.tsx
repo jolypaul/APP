@@ -82,10 +82,10 @@ interface QuickCard {
 const QUICK_CARDS: QuickCard[] = [
   {
     to: '/discret-evaluation',
-    icon: faUserSecret,
+    icon: faClipboardCheck,
     gradient: 'linear-gradient(135deg, #312e81, #4f46e5)',
-    title: 'Mode Discret',
-    text: '\u00c9valuer un employ\u00e9 de mani\u00e8re invisible',
+    title: '\u00c9valuations',
+    text: '\u00c9valuer les employ\u00e9s',
     roles: [Authority.ADMIN, Authority.MANAGER],
   },
   {
@@ -95,14 +95,6 @@ const QUICK_CARDS: QuickCard[] = [
     title: 'Employ\u00e9s',
     text: 'G\u00e9rer la liste des employ\u00e9s',
     roles: [Authority.ADMIN, Authority.RH],
-  },
-  {
-    to: '/evaluation',
-    icon: faClipboardCheck,
-    gradient: 'linear-gradient(135deg, #0e7490, #06b6d4)',
-    title: '\u00c9valuations',
-    text: 'Consulter les \u00e9valuations',
-    roles: [Authority.ADMIN, Authority.MANAGER, Authority.EXPERT],
   },
   {
     to: '/test',
@@ -171,9 +163,21 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (isAuthenticated && showStats) {
-      getDashboardStats()
-        .then(res => setStats(res.data))
-        .catch(() => setStatsError(true));
+      const fetchStats = (retries = 2) => {
+        getDashboardStats()
+          .then(res => {
+            setStats(res.data);
+            setStatsError(false);
+          })
+          .catch(() => {
+            if (retries > 0) {
+              setTimeout(() => fetchStats(retries - 1), 1500);
+            } else {
+              setStatsError(true);
+            }
+          });
+      };
+      fetchStats();
     }
   }, [isAuthenticated, showStats]);
 
@@ -322,7 +326,7 @@ const Dashboard = () => {
 
       {showStats && statsError && (
         <Alert variant="warning" className="mb-4" style={{ borderRadius: '1rem', border: 'none' }}>
-          Impossible de charger les statistiques. V&eacute;rifiez vos permissions.
+          Impossible de charger les statistiques. V&eacute;rifiez que le serveur est d&eacute;marr&eacute; et rechargez la page.
         </Alert>
       )}
 

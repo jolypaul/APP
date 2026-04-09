@@ -115,7 +115,7 @@ const StartStep = ({
     <div className="discret-header">
       <h2 className="discret-title">
         <FontAwesomeIcon icon={faUserSecret} style={{ color: '#4f46e5' }} />
-        Mode Discret
+        &Eacute;valuations
       </h2>
       <p className="discret-subtitle">Le manager &eacute;value l&apos;employ&eacute; sans que celui-ci soit notifi&eacute;.</p>
     </div>

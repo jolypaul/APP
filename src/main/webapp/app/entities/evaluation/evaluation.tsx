@@ -9,6 +9,8 @@ import axios from 'axios';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
+import { Authority } from 'app/shared/jhipster/constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 
@@ -23,6 +25,10 @@ export const Evaluation = () => {
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
+
+  const account = useAppSelector(state => state.authentication.account);
+  const authorities: string[] = account?.authorities ?? [];
+  const isManager = hasAnyAuthority(authorities, [Authority.MANAGER]) && !hasAnyAuthority(authorities, [Authority.ADMIN]);
 
   const evaluationList = useAppSelector(state => state.evaluation.entities);
   const loading = useAppSelector(state => state.evaluation.loading);
@@ -133,10 +139,12 @@ export const Evaluation = () => {
                   <Translate contentKey="skillTestApp.evaluation.mode">Mode</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('mode')} />
                 </th>
-                <th className="hand" onClick={sort('scoreTotal')}>
-                  <Translate contentKey="skillTestApp.evaluation.scoreTotal">Score Total</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('scoreTotal')} />
-                </th>
+                {!isManager && (
+                  <th className="hand" onClick={sort('scoreTotal')}>
+                    <Translate contentKey="skillTestApp.evaluation.scoreTotal">Score Total</Translate>{' '}
+                    <FontAwesomeIcon icon={getSortIconByFieldName('scoreTotal')} />
+                  </th>
+                )}
                 <th className="hand" onClick={sort('remarques')}>
                   <Translate contentKey="skillTestApp.evaluation.remarques">Remarques</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('remarques')} />
@@ -176,7 +184,7 @@ export const Evaluation = () => {
                   <td>
                     <Translate contentKey={`skillTestApp.TestMode.${evaluation.mode}`} />
                   </td>
-                  <td>{evaluation.scoreTotal}</td>
+                  {!isManager && <td>{evaluation.scoreTotal}</td>}
                   <td>{evaluation.remarques}</td>
                   <td>
                     <Translate contentKey={`skillTestApp.Statut.${evaluation.statut}`} />
