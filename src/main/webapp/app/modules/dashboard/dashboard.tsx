@@ -2,9 +2,11 @@ import './dashboard.scss';
 
 import React, { useEffect, useState } from 'react';
 import { getDashboardStats } from '../discret-evaluation/discret-evaluation.api';
-import { Alert, Button, Card, Col, ProgressBar, Row } from 'react-bootstrap';
+import { Alert, Badge, Button, Card, Col, ProgressBar, Row } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { useAppSelector } from 'app/config/store';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
+import { Authority } from 'app/shared/jhipster/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUsers,
@@ -19,7 +21,12 @@ import {
   faRocket,
   faTrophy,
   faArrowRight,
+  faCogs,
+  faChartBar,
+  faGraduationCap,
+  faShieldAlt,
 } from '@fortawesome/free-solid-svg-icons';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 interface DashboardData {
   conformitePourcentage: number;
@@ -30,19 +37,145 @@ interface DashboardData {
   evaluationsNonConformes: number;
 }
 
+const ROLE_META: Record<string, { label: string; color: string; icon: IconDefinition; subtitle: string }> = {
+  [Authority.ADMIN]: {
+    label: 'Administrateur',
+    color: '#4f46e5',
+    icon: faShieldAlt,
+    subtitle: 'Vue d\u2019ensemble de la plateforme',
+  },
+  [Authority.RH]: {
+    label: 'Ressources Humaines',
+    color: '#0891b2',
+    icon: faUsers,
+    subtitle: 'Suivi des employ\u00e9s et r\u00e9sultats',
+  },
+  [Authority.MANAGER]: {
+    label: 'Manager',
+    color: '#7c3aed',
+    icon: faUserSecret,
+    subtitle: 'Gestion des \u00e9valuations et tests',
+  },
+  [Authority.EXPERT]: {
+    label: 'Expert',
+    color: '#059669',
+    icon: faCogs,
+    subtitle: 'D\u00e9finition et \u00e9valuation des comp\u00e9tences',
+  },
+  [Authority.EMPLOYEE]: {
+    label: 'Employ\u00e9',
+    color: '#d97706',
+    icon: faGraduationCap,
+    subtitle: 'Votre espace de comp\u00e9tences',
+  },
+};
+
+interface QuickCard {
+  to: string;
+  icon: IconDefinition;
+  gradient: string;
+  title: string;
+  text: string;
+  roles: string[];
+}
+
+const QUICK_CARDS: QuickCard[] = [
+  {
+    to: '/discret-evaluation',
+    icon: faUserSecret,
+    gradient: 'linear-gradient(135deg, #312e81, #4f46e5)',
+    title: 'Mode Discret',
+    text: '\u00c9valuer un employ\u00e9 de mani\u00e8re invisible',
+    roles: [Authority.ADMIN, Authority.MANAGER],
+  },
+  {
+    to: '/employee',
+    icon: faUsers,
+    gradient: 'linear-gradient(135deg, #1e40af, #3b82f6)',
+    title: 'Employ\u00e9s',
+    text: 'G\u00e9rer la liste des employ\u00e9s',
+    roles: [Authority.ADMIN, Authority.RH],
+  },
+  {
+    to: '/evaluation',
+    icon: faClipboardCheck,
+    gradient: 'linear-gradient(135deg, #0e7490, #06b6d4)',
+    title: '\u00c9valuations',
+    text: 'Consulter les \u00e9valuations',
+    roles: [Authority.ADMIN, Authority.MANAGER, Authority.EXPERT],
+  },
+  {
+    to: '/test',
+    icon: faListAlt,
+    gradient: 'linear-gradient(135deg, #b45309, #f59e0b)',
+    title: 'Tests',
+    text: 'Cr\u00e9er et g\u00e9rer les tests',
+    roles: [Authority.ADMIN, Authority.MANAGER],
+  },
+  {
+    to: '/competence',
+    icon: faTrophy,
+    gradient: 'linear-gradient(135deg, #047857, #10b981)',
+    title: 'Comp\u00e9tences',
+    text: 'R\u00e9f\u00e9rentiel des comp\u00e9tences',
+    roles: [Authority.ADMIN, Authority.EXPERT],
+  },
+  {
+    to: '/question',
+    icon: faQuestionCircle,
+    gradient: 'linear-gradient(135deg, #b91c1c, #ef4444)',
+    title: 'Questions',
+    text: 'Banque de questions',
+    roles: [Authority.ADMIN, Authority.MANAGER],
+  },
+  {
+    to: '/poste',
+    icon: faBriefcase,
+    gradient: 'linear-gradient(135deg, #334155, #64748b)',
+    title: 'Postes',
+    text: 'G\u00e9rer les postes',
+    roles: [Authority.ADMIN, Authority.RH],
+  },
+  {
+    to: '/score',
+    icon: faChartBar,
+    gradient: 'linear-gradient(135deg, #92400e, #d97706)',
+    title: 'Scores',
+    text: 'Consulter les r\u00e9sultats',
+    roles: [Authority.ADMIN, Authority.RH],
+  },
+  {
+    to: '/reponse',
+    icon: faClipboardCheck,
+    gradient: 'linear-gradient(135deg, #475569, #94a3b8)',
+    title: 'R\u00e9ponses',
+    text: 'Historique des r\u00e9ponses',
+    roles: [Authority.ADMIN, Authority.MANAGER, Authority.EXPERT, Authority.EMPLOYEE],
+  },
+];
+
 const Dashboard = () => {
   const account = useAppSelector(state => state.authentication.account);
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
+  const authorities: string[] = account?.authorities ?? [];
   const [stats, setStats] = useState<DashboardData | null>(null);
   const [statsError, setStatsError] = useState(false);
 
+  const has = (...roles: string[]) => hasAnyAuthority(authorities, roles);
+  const showStats = has(Authority.ADMIN, Authority.RH, Authority.MANAGER);
+
+  const primaryRole = [Authority.ADMIN, Authority.RH, Authority.MANAGER, Authority.EXPERT, Authority.EMPLOYEE].find(r =>
+    authorities.includes(r),
+  );
+  const roleMeta = primaryRole ? ROLE_META[primaryRole] : null;
+
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && showStats) {
       getDashboardStats()
         .then(res => setStats(res.data))
         .catch(() => setStatsError(true));
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, showStats]);
 
   if (!isAuthenticated) {
     return (
@@ -75,33 +208,45 @@ const Dashboard = () => {
         : '#ef4444'
     : '#94a3b8';
 
+  const visibleCards = QUICK_CARDS.filter(c => has(...c.roles));
+
   return (
     <div>
       {/* Header */}
       <div className="dashboard-header">
-        <h2 className="dashboard-greeting">
-          Bonjour, <span style={{ color: '#4f46e5' }}>{account?.login || 'utilisateur'}</span>
-        </h2>
-        <p className="dashboard-subtitle">Voici un aper&ccedil;u de vos comp&eacute;tences et &eacute;valuations</p>
+        <div className="d-flex align-items-center flex-wrap gap-3 mb-1">
+          <h2 className="dashboard-greeting mb-0">
+            Bonjour, <span style={{ color: roleMeta?.color ?? '#4f46e5' }}>{account?.login || 'utilisateur'}</span>
+          </h2>
+          {roleMeta && (
+            <Badge pill className="role-badge" style={{ background: roleMeta.color, fontSize: '0.8rem', padding: '0.45em 1em' }}>
+              <FontAwesomeIcon icon={roleMeta.icon} className="me-1" />
+              {roleMeta.label}
+            </Badge>
+          )}
+        </div>
+        <p className="dashboard-subtitle">{roleMeta?.subtitle ?? 'Voici un aper\u00e7u de votre espace'}</p>
       </div>
 
-      {/* KPI Cards */}
-      {stats && (
+      {/* KPI Cards — ADMIN / RH / MANAGER only */}
+      {showStats && stats && (
         <>
           <Row className="mb-4 g-3">
-            <Col lg={3} sm={6}>
-              <Card className="kpi-card h-100">
-                <Card.Body>
-                  <div className="kpi-icon-wrapper" style={{ background: 'rgba(79, 70, 229, 0.1)' }}>
-                    <FontAwesomeIcon icon={faUsers} style={{ color: '#4f46e5' }} />
-                  </div>
-                  <div className="kpi-value" style={{ color: '#4f46e5' }}>
-                    {stats.totalEmployees}
-                  </div>
-                  <div className="kpi-label">Employ&eacute;s</div>
-                </Card.Body>
-              </Card>
-            </Col>
+            {has(Authority.ADMIN, Authority.RH) && (
+              <Col lg={3} sm={6}>
+                <Card className="kpi-card h-100">
+                  <Card.Body>
+                    <div className="kpi-icon-wrapper" style={{ background: 'rgba(79, 70, 229, 0.1)' }}>
+                      <FontAwesomeIcon icon={faUsers} style={{ color: '#4f46e5' }} />
+                    </div>
+                    <div className="kpi-value" style={{ color: '#4f46e5' }}>
+                      {stats.totalEmployees}
+                    </div>
+                    <div className="kpi-label">Employ&eacute;s</div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            )}
             <Col lg={3} sm={6}>
               <Card className="kpi-card h-100">
                 <Card.Body>
@@ -175,118 +320,57 @@ const Dashboard = () => {
         </>
       )}
 
-      {statsError && (
+      {showStats && statsError && (
         <Alert variant="warning" className="mb-4" style={{ borderRadius: '1rem', border: 'none' }}>
           Impossible de charger les statistiques. V&eacute;rifiez vos permissions.
         </Alert>
       )}
 
-      {/* Quick Access */}
-      <div className="quick-access-title">
-        <FontAwesomeIcon icon={faRocket} />
-        Acc&egrave;s rapide
-      </div>
-      <Row className="g-3">
-        <Col lg={4} md={6}>
-          <Card as={Link} to="/discret-evaluation" className="quick-card h-100">
-            <Card.Body className="text-center">
-              <div className="quick-icon" style={{ background: 'linear-gradient(135deg, #312e81, #4f46e5)' }}>
-                <FontAwesomeIcon icon={faUserSecret} style={{ color: '#fff' }} />
-              </div>
-              <Card.Title>Mode Discret</Card.Title>
-              <Card.Text>&Eacute;valuer un employ&eacute; de mani&egrave;re invisible</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col lg={4} md={6}>
-          <Card as={Link} to="/employee" className="quick-card h-100">
-            <Card.Body className="text-center">
-              <div className="quick-icon" style={{ background: 'linear-gradient(135deg, #1e40af, #3b82f6)' }}>
-                <FontAwesomeIcon icon={faUsers} style={{ color: '#fff' }} />
-              </div>
-              <Card.Title>Employ&eacute;s</Card.Title>
-              <Card.Text>G&eacute;rer la liste des employ&eacute;s</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col lg={4} md={6}>
-          <Card as={Link} to="/evaluation" className="quick-card h-100">
-            <Card.Body className="text-center">
-              <div className="quick-icon" style={{ background: 'linear-gradient(135deg, #0e7490, #06b6d4)' }}>
-                <FontAwesomeIcon icon={faClipboardCheck} style={{ color: '#fff' }} />
-              </div>
-              <Card.Title>&Eacute;valuations</Card.Title>
-              <Card.Text>Consulter toutes les &eacute;valuations</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col lg={4} md={6}>
-          <Card as={Link} to="/test" className="quick-card h-100">
-            <Card.Body className="text-center">
-              <div className="quick-icon" style={{ background: 'linear-gradient(135deg, #b45309, #f59e0b)' }}>
-                <FontAwesomeIcon icon={faListAlt} style={{ color: '#fff' }} />
-              </div>
-              <Card.Title>Tests</Card.Title>
-              <Card.Text>Cr&eacute;er et g&eacute;rer les tests</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col lg={4} md={6}>
-          <Card as={Link} to="/competence" className="quick-card h-100">
-            <Card.Body className="text-center">
-              <div className="quick-icon" style={{ background: 'linear-gradient(135deg, #047857, #10b981)' }}>
-                <FontAwesomeIcon icon={faTrophy} style={{ color: '#fff' }} />
-              </div>
-              <Card.Title>Comp&eacute;tences</Card.Title>
-              <Card.Text>R&eacute;f&eacute;rentiel des comp&eacute;tences</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col lg={4} md={6}>
-          <Card as={Link} to="/question" className="quick-card h-100">
-            <Card.Body className="text-center">
-              <div className="quick-icon" style={{ background: 'linear-gradient(135deg, #b91c1c, #ef4444)' }}>
-                <FontAwesomeIcon icon={faQuestionCircle} style={{ color: '#fff' }} />
-              </div>
-              <Card.Title>Questions</Card.Title>
-              <Card.Text>Banque de questions</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col lg={4} md={6}>
-          <Card as={Link} to="/poste" className="quick-card h-100">
-            <Card.Body className="text-center">
-              <div className="quick-icon" style={{ background: 'linear-gradient(135deg, #334155, #64748b)' }}>
-                <FontAwesomeIcon icon={faBriefcase} style={{ color: '#fff' }} />
-              </div>
-              <Card.Title>Postes</Card.Title>
-              <Card.Text>G&eacute;rer les postes</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col lg={4} md={6}>
-          <Card as={Link} to="/score" className="quick-card h-100">
-            <Card.Body className="text-center">
-              <div className="quick-icon" style={{ background: 'linear-gradient(135deg, #92400e, #d97706)' }}>
-                <FontAwesomeIcon icon={faTrophy} style={{ color: '#fff' }} />
-              </div>
-              <Card.Title>Scores</Card.Title>
-              <Card.Text>Scores d&eacute;taill&eacute;s</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col lg={4} md={6}>
-          <Card as={Link} to="/reponse" className="quick-card h-100">
-            <Card.Body className="text-center">
-              <div className="quick-icon" style={{ background: 'linear-gradient(135deg, #475569, #94a3b8)' }}>
-                <FontAwesomeIcon icon={faClipboardCheck} style={{ color: '#fff' }} />
-              </div>
-              <Card.Title>R&eacute;ponses</Card.Title>
-              <Card.Text>Historique des r&eacute;ponses</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+      {/* Welcome card for EXPERT / EMPLOYEE (no KPI stats) */}
+      {!showStats && roleMeta && (
+        <Card className="welcome-card mb-4">
+          <Card.Body className="d-flex align-items-center gap-4 flex-wrap">
+            <div className="welcome-icon-wrapper" style={{ background: `${roleMeta.color}15` }}>
+              <FontAwesomeIcon icon={roleMeta.icon} size="2x" style={{ color: roleMeta.color }} />
+            </div>
+            <div>
+              <h4 className="mb-1" style={{ fontWeight: 700, color: '#1e293b' }}>
+                Bienvenue sur SkillTestApp
+              </h4>
+              <p className="mb-0" style={{ color: '#64748b' }}>
+                {primaryRole === Authority.EXPERT
+                  ? 'D\u00e9finissez les comp\u00e9tences et participez aux \u00e9valuations des employ\u00e9s.'
+                  : 'Consultez vos \u00e9valuations et passez vos tests de comp\u00e9tences.'}
+              </p>
+            </div>
+          </Card.Body>
+        </Card>
+      )}
+
+      {/* Quick Access — filtered by role */}
+      {visibleCards.length > 0 && (
+        <>
+          <div className="quick-access-title">
+            <FontAwesomeIcon icon={faRocket} />
+            Acc&egrave;s rapide
+          </div>
+          <Row className="g-3">
+            {visibleCards.map(card => (
+              <Col lg={4} md={6} key={card.to}>
+                <Card as={Link} to={card.to} className="quick-card h-100">
+                  <Card.Body className="text-center">
+                    <div className="quick-icon" style={{ background: card.gradient }}>
+                      <FontAwesomeIcon icon={card.icon} style={{ color: '#fff' }} />
+                    </div>
+                    <Card.Title>{card.title}</Card.Title>
+                    <Card.Text>{card.text}</Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </>
+      )}
     </div>
   );
 };

@@ -6,7 +6,6 @@ import Activate from 'app/modules/account/activate/activate';
 import PasswordResetFinish from 'app/modules/account/password-reset/finish/password-reset-finish';
 import PasswordResetInit from 'app/modules/account/password-reset/init/password-reset-init';
 import Register from 'app/modules/account/register/register';
-import Home from 'app/modules/home/home';
 import Login from 'app/modules/login/login';
 import Logout from 'app/modules/login/logout';
 import Dashboard from 'app/modules/dashboard/dashboard';
@@ -27,7 +26,7 @@ const AppRoutes = () => {
       <Suspense fallback={loading}>
         <ErrorBoundaryRoutes>
           <Route index element={<Dashboard />} />
-          <Route path="home" element={<Home />} />
+          <Route path="home" element={<Dashboard />} />
           <Route path="login" element={<Login />} />
           <Route path="logout" element={<Logout />} />
           <Route path="account">
@@ -57,7 +56,7 @@ const AppRoutes = () => {
           <Route
             path="dashboard"
             element={
-              <PrivateRoute hasAnyAuthorities={[Authority.ADMIN, Authority.RH, Authority.MANAGER]}>
+              <PrivateRoute hasAnyAuthorities={[Authority.ADMIN, Authority.RH, Authority.MANAGER, Authority.EXPERT, Authority.EMPLOYEE]}>
                 <Dashboard />
               </PrivateRoute>
             }

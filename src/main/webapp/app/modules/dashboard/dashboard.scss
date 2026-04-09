@@ -1,3 +1,23 @@
+.welcome-card {
+  border: none !important;
+  border-radius: 1rem !important;
+  background: #fff;
+  .welcome-icon-wrapper {
+    width: 72px;
+    height: 72px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+}
+
+.role-badge {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
 .dashboard-landing {
   min-height: 80vh;
   display: flex;

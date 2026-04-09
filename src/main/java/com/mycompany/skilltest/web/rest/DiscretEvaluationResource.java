@@ -71,7 +71,15 @@ public class DiscretEvaluationResource {
     }
 
     @GetMapping("/dashboard")
-    @Secured({ AuthoritiesConstants.ADMIN, AuthoritiesConstants.RH, AuthoritiesConstants.MANAGER })
+    @Secured(
+        {
+            AuthoritiesConstants.ADMIN,
+            AuthoritiesConstants.RH,
+            AuthoritiesConstants.MANAGER,
+            AuthoritiesConstants.EXPERT,
+            AuthoritiesConstants.EMPLOYEE,
+        }
+    )
     public ResponseEntity<DashboardDTO> getDashboard() {
         LOG.debug("REST request to get dashboard stats");
         DashboardDTO result = discretEvaluationService.getDashboardStats();

@@ -1,6 +1,7 @@
 package com.mycompany.skilltest.web.rest;
 
 import com.mycompany.skilltest.repository.TestRepository;
+import com.mycompany.skilltest.security.AuthoritiesConstants;
 import com.mycompany.skilltest.service.TestQueryService;
 import com.mycompany.skilltest.service.TestService;
 import com.mycompany.skilltest.service.criteria.TestCriteria;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -31,6 +33,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/tests")
+@Secured({ AuthoritiesConstants.ADMIN, AuthoritiesConstants.MANAGER })
 public class TestResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestResource.class);
