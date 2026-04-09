@@ -1,0 +1,111 @@
+@startuml Diagramme de Cas d'Utilisation - SkillTestApp
+
+skinparam actorFontSize 14
+skinparam usecaseFontSize 12
+skinparam packageFontSize 14
+
+left to right direction
+
+' ──────────── Acteurs ────────────
+
+actor "Administrateur" as Admin
+actor "Manager" as Manager
+actor "Employé RH" as RH
+
+Admin --|> Manager
+Admin --|> RH
+
+' ──────────── Paquets ────────────
+
+rectangle "Gestion des utilisateurs" {
+  usecase "Se connecter" as UC_LOGIN
+  usecase "Gérer les comptes utilisateurs" as UC_USERS
+  usecase "Activer / Désactiver un compte" as UC_TOGGLE
+  usecase "Créer un compte (inscription)" as UC_REGISTER
+}
+
+rectangle "Gestion des employés" {
+  usecase "Consulter la liste des employés" as UC_LIST_EMP
+  usecase "Créer / Modifier un employé" as UC_CRUD_EMP
+  usecase "Affecter un poste à un employé" as UC_AFFECT_POSTE
+}
+
+rectangle "Gestion des compétences et postes" {
+  usecase "Gérer les postes" as UC_POSTES
+  usecase "Gérer les compétences" as UC_COMP
+  usecase "Associer compétences à un poste" as UC_ASSOC_COMP
+}
+
+rectangle "Gestion des tests" {
+  usecase "Créer / Modifier un test" as UC_CRUD_TEST
+  usecase "Gérer les questions d'un test" as UC_QUESTIONS
+  usecase "Associer compétences à un test" as UC_ASSOC_TEST
+}
+
+rectangle "Évaluation classique" {
+  usecase "Démarrer une évaluation classique" as UC_EVAL_CLASSIQUE
+  usecase "Répondre aux questions" as UC_REPONDRE
+  usecase "Consulter les résultats" as UC_RESULTATS
+}
+
+rectangle "Évaluation discrète (Mode Discret)" {
+  usecase "Démarrer une évaluation discrète" as UC_EVAL_DISCRET
+  usecase "Saisir les réponses de l'employé" as UC_SAISIR
+  usecase "Suspendre une évaluation" as UC_SUSPENDRE
+  usecase "Reprendre une évaluation suspendue" as UC_REPRENDRE
+  usecase "Finaliser l'évaluation" as UC_FINALISER
+  usecase "Correction automatique par IA" as UC_IA
+}
+
+rectangle "Tableau de bord & Reporting" {
+  usecase "Consulter le dashboard" as UC_DASHBOARD
+  usecase "Consulter les scores par compétence" as UC_SCORES
+  usecase "Consulter la liste des évaluations" as UC_LIST_EVAL
+}
+
+' ──────────── Liens Acteurs ────────────
+
+Admin --> UC_LOGIN
+Admin --> UC_USERS
+Admin --> UC_TOGGLE
+Admin --> UC_REGISTER
+
+Admin --> UC_POSTES
+Admin --> UC_COMP
+Admin --> UC_ASSOC_COMP
+
+RH --> UC_LOGIN
+RH --> UC_LIST_EMP
+RH --> UC_CRUD_EMP
+RH --> UC_AFFECT_POSTE
+
+RH --> UC_CRUD_TEST
+RH --> UC_QUESTIONS
+RH --> UC_ASSOC_TEST
+
+Manager --> UC_LOGIN
+Manager --> UC_LIST_EMP
+Manager --> UC_DASHBOARD
+
+Manager --> UC_EVAL_CLASSIQUE
+Manager --> UC_EVAL_DISCRET
+Manager --> UC_SAISIR
+Manager --> UC_SUSPENDRE
+Manager --> UC_REPRENDRE
+Manager --> UC_FINALISER
+Manager --> UC_RESULTATS
+Manager --> UC_LIST_EVAL
+Manager --> UC_SCORES
+
+' ──────────── Relations internes ────────────
+
+UC_EVAL_DISCRET ..> UC_SAISIR : <<include>>
+UC_SAISIR ..> UC_IA : <<include>>
+UC_REPRENDRE ..> UC_SAISIR : <<include>>
+UC_EVAL_DISCRET ..> UC_FINALISER : <<include>>
+UC_SUSPENDRE ..> UC_REPRENDRE : <<extend>>
+
+UC_EVAL_CLASSIQUE ..> UC_REPONDRE : <<include>>
+UC_REPONDRE ..> UC_RESULTATS : <<include>>
+
+@enduml

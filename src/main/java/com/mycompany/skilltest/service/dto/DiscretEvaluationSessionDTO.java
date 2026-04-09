@@ -15,6 +15,8 @@ public class DiscretEvaluationSessionDTO implements Serializable {
 
     private List<DiscretQuestionDTO> questions = new ArrayList<>();
 
+    private int resumeIndex = 0;
+
     public EvaluationDTO getEvaluation() {
         return evaluation;
     }
@@ -37,5 +39,13 @@ public class DiscretEvaluationSessionDTO implements Serializable {
 
     public void setQuestions(List<DiscretQuestionDTO> questions) {
         this.questions = questions;
+    }
+
+    public int getResumeIndex() {
+        return resumeIndex;
+    }
+
+    public void setResumeIndex(int resumeIndex) {
+        this.resumeIndex = resumeIndex;
     }
 }

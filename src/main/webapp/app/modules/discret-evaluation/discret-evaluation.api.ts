@@ -47,6 +47,14 @@ export const finalizeEvaluation = (evaluationId: number) => {
   return axios.post(`${apiUrl}/finalize/${evaluationId}`);
 };
 
+export const suspendEvaluation = (evaluationId: number) => {
+  return axios.post(`${apiUrl}/suspend/${evaluationId}`);
+};
+
+export const resumeEvaluation = (evaluationId: number) => {
+  return axios.post<IDiscretSession & { resumeIndex: number }>(`${apiUrl}/resume/${evaluationId}`);
+};
+
 export const getDashboardStats = () => {
   return axios.get(`${apiUrl}/dashboard`);
 };

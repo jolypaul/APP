@@ -1,0 +1,174 @@
+@startuml Diagramme de Classes - SkillTestApp
+
+skinparam classAttributeIconSize 0
+skinparam classFontSize 13
+skinparam packageFontSize 14
+skinparam linetype ortho
+
+' ──────────── Enumerations ────────────
+
+enum Level {
+  DEBUTANT
+  INTERMEDIAIRE
+  AVANCE
+  EXPERT
+}
+
+enum Role {
+  ADMIN
+  RH
+  MANAGER
+  EXPERT
+  EMPLOYEE
+}
+
+enum TestMode {
+  CLASSIQUE
+  DISCRET
+}
+
+enum QuestionType {
+  QCM
+  OUVERTE
+  VRAI_FAUX
+  PRATIQUE
+}
+
+enum EvaluationStatus {
+  EN_COURS
+  SUSPENDUE
+  TERMINEE
+  ANNULEE
+}
+
+enum Statut {
+  CONFORME
+  A_AMELIORER
+  NON_CONFORME
+}
+
+' ──────────── Entités ────────────
+
+class Employee {
+  - id : Long
+  - matricule : String {unique, not null}
+  - nom : String {not null}
+  - prenom : String {not null}
+  - email : String {unique, not null}
+  - telephone : String
+  - dateEmbauche : LocalDate {not null}
+  - role : Role {not null}
+}
+
+class Poste {
+  - id : Long
+  - intitule : String {unique, not null}
+  - description : String
+  - niveauRequis : Level {not null}
+}
+
+class Competence {
+  - id : Long
+  - nom : String {unique, not null}
+  - description : String
+  - categorie : String
+  - niveauAttendu : Level {not null}
+}
+
+class Test {
+  - id : Long
+  - titre : String {not null}
+  - description : String
+  - mode : TestMode {not null}
+  - duree : Integer
+  - dateCreation : Instant {not null}
+  - actif : Boolean {not null}
+}
+
+class Question {
+  - id : Long
+  - enonce : String {not null}
+  - type : QuestionType {not null}
+  - niveau : Level {not null}
+  - points : Integer {not null}
+  - choixMultiple : String
+  - reponseAttendue : String
+}
+
+class Evaluation {
+  - id : Long
+  - dateEvaluation : Instant {not null}
+  - status : EvaluationStatus {not null}
+  - mode : TestMode {not null}
+  - scoreTotal : Double
+  - remarques : String
+  - statut : Statut
+}
+
+class Reponse {
+  - id : Long
+  - contenu : String {not null}
+  - estCorrecte : Boolean
+  - dateReponse : Instant {not null}
+  - commentaireManager : String
+}
+
+class Score {
+  - id : Long
+  - valeur : Double {not null}
+  - pourcentage : Double {not null}
+  - statut : Statut {not null}
+  - dateCalcul : Instant {not null}
+}
+
+class User {
+  - id : Long
+  - login : String {unique, not null}
+  - password : String {not null}
+  - firstName : String
+  - lastName : String
+  - email : String {unique}
+  - activated : boolean {not null}
+  - langKey : String
+}
+
+class Authority {
+  - name : String {PK}
+}
+
+' ──────────── Relations ────────────
+
+Employee "* " --> "1" Poste : poste
+
+Poste "* " -- "* " Competence : competenceses
+
+Test "* " -- "* " Competence : competenceses
+
+Question "* " --> "1" Test : test
+
+Evaluation "* " --> "1" Employee : employee
+Evaluation "* " --> "1" Test : test
+Evaluation "* " --> "0..1" Employee : manager
+
+Reponse "* " --> "1" Question : question
+Reponse "* " --> "1" Evaluation : evaluation
+
+Score "* " --> "1" Evaluation : evaluation
+Score "* " --> "1" Competence : competence
+
+User "* " -- "* " Authority : authorities
+
+' ──────────── Liens enum ────────────
+
+Employee ..> Role
+Poste ..> Level
+Competence ..> Level
+Test ..> TestMode
+Question ..> QuestionType
+Question ..> Level
+Evaluation ..> EvaluationStatus
+Evaluation ..> TestMode
+Evaluation ..> Statut
+Score ..> Statut
+
+@enduml

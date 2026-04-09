@@ -54,6 +54,22 @@ public class DiscretEvaluationResource {
         return ResponseEntity.ok(result);
     }
 
+    @PostMapping("/suspend/{evaluationId}")
+    @Secured({ AuthoritiesConstants.ADMIN, AuthoritiesConstants.RH, AuthoritiesConstants.MANAGER })
+    public ResponseEntity<EvaluationDTO> suspendEvaluation(@PathVariable Long evaluationId) {
+        LOG.debug("REST request to suspend evaluation: {}", evaluationId);
+        EvaluationDTO result = discretEvaluationService.suspendEvaluation(evaluationId);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/resume/{evaluationId}")
+    @Secured({ AuthoritiesConstants.ADMIN, AuthoritiesConstants.RH, AuthoritiesConstants.MANAGER })
+    public ResponseEntity<DiscretEvaluationSessionDTO> resumeEvaluation(@PathVariable Long evaluationId) {
+        LOG.debug("REST request to resume evaluation: {}", evaluationId);
+        DiscretEvaluationSessionDTO result = discretEvaluationService.resumeEvaluation(evaluationId);
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping("/dashboard")
     @Secured({ AuthoritiesConstants.ADMIN, AuthoritiesConstants.RH, AuthoritiesConstants.MANAGER })
     public ResponseEntity<DashboardDTO> getDashboard() {

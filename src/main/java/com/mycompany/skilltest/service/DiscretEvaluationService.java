@@ -168,6 +168,64 @@ public class DiscretEvaluationService {
         return evaluationMapper.toDto(evaluation);
     }
 
+    public EvaluationDTO suspendEvaluation(Long evaluationId) {
+        LOG.debug("Suspending evaluation: {}", evaluationId);
+
+        Evaluation evaluation = evaluationRepository
+            .findById(evaluationId)
+            .orElseThrow(() -> new BadRequestAlertException("Evaluation not found", "evaluation", "evaluationnotfound"));
+
+        if (evaluation.getStatus() != EvaluationStatus.EN_COURS) {
+            throw new BadRequestAlertException("Evaluation is not in progress", "evaluation", "evaluationnotinprogress");
+        }
+
+        evaluation.setStatus(EvaluationStatus.SUSPENDUE);
+        evaluation = evaluationRepository.save(evaluation);
+        return evaluationMapper.toDto(evaluation);
+    }
+
+    public DiscretEvaluationSessionDTO resumeEvaluation(Long evaluationId) {
+        LOG.debug("Resuming evaluation: {}", evaluationId);
+
+        Evaluation evaluation = evaluationRepository
+            .findOneWithEagerRelationships(evaluationId)
+            .orElseThrow(() -> new BadRequestAlertException("Evaluation not found", "evaluation", "evaluationnotfound"));
+
+        if (evaluation.getStatus() != EvaluationStatus.SUSPENDUE && evaluation.getStatus() != EvaluationStatus.EN_COURS) {
+            throw new BadRequestAlertException("Evaluation cannot be resumed", "evaluation", "evaluationnotresumable");
+        }
+
+        evaluation.setStatus(EvaluationStatus.EN_COURS);
+        evaluationRepository.save(evaluation);
+
+        // Rebuild the same questionnaire — use the test already fetched before save
+        Long testId = evaluation.getTest().getId();
+        List<DiscretQuestionDTO> questions = buildQuestionnaire(testId);
+
+        // Find already answered questions
+        List<Reponse> existingReponses = reponseRepository.findByEvaluationId(evaluationId);
+        List<Long> answeredQuestionIds = existingReponses
+            .stream()
+            .map(r -> r.getQuestion().getId())
+            .toList();
+
+        // Mark answered questions and set resumeIndex
+        int resumeIndex = 0;
+        for (int i = 0; i < questions.size(); i++) {
+            if (answeredQuestionIds.contains(questions.get(i).getId())) {
+                resumeIndex = i + 1;
+            }
+        }
+
+        EvaluationDTO evaluationDTO = evaluationMapper.toDto(evaluation);
+        DiscretEvaluationSessionDTO session = new DiscretEvaluationSessionDTO();
+        session.setEvaluation(evaluationDTO);
+        session.setManager(evaluationDTO.getManager());
+        session.setQuestions(questions);
+        session.setResumeIndex(resumeIndex);
+        return session;
+    }
+
     @Transactional(readOnly = true)
     public DashboardDTO getDashboardStats() {
         DashboardDTO dashboard = new DashboardDTO();

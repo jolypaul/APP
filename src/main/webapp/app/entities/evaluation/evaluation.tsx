@@ -3,8 +3,9 @@ import { Button, Table } from 'react-bootstrap';
 import { JhiItemCount, JhiPagination, TextFormat, Translate, getPaginationState } from 'react-jhipster';
 import { Link, useLocation, useNavigate } from 'react-router';
 
-import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { faPause, faPlay, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -79,6 +80,11 @@ export const Evaluation = () => {
     });
 
   const handleSyncList = () => {
+    sortEntities();
+  };
+
+  const handleSuspend = async (evaluationId: number) => {
+    await axios.post(`/api/discret-evaluation/suspend/${evaluationId}`);
     sortEntities();
   };
 
@@ -186,18 +192,16 @@ export const Evaluation = () => {
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
-                      <Button
-                        as={Link as any}
-                        to={`/evaluation/${evaluation.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                        variant="primary"
-                        size="sm"
-                        data-cy="entityEditButton"
-                      >
-                        <FontAwesomeIcon icon="pencil-alt" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.edit">Edit</Translate>
-                        </span>
-                      </Button>
+                      {(evaluation.status === 'EN_COURS' || evaluation.status === 'SUSPENDUE') && evaluation.mode === 'DISCRET' && (
+                        <Button as={Link as any} to={`/discret-evaluation?resume=${evaluation.id}`} variant="success" size="sm">
+                          <FontAwesomeIcon icon={faPlay} /> <span className="d-none d-md-inline">Reprendre</span>
+                        </Button>
+                      )}
+                      {evaluation.status === 'EN_COURS' && evaluation.mode === 'DISCRET' && (
+                        <Button variant="warning" size="sm" onClick={() => handleSuspend(evaluation.id)}>
+                          <FontAwesomeIcon icon={faPause} /> <span className="d-none d-md-inline">Suspendre</span>
+                        </Button>
+                      )}
                       <Button
                         onClick={() =>
                           (window.location.href = `/evaluation/${evaluation.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)

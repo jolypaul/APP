@@ -6,6 +6,7 @@ import {
   finalizeEvaluation,
   IAnswerCorrectionResult,
   IDiscretQuestion,
+  resumeEvaluation,
   startDiscretEvaluation,
   submitAnswerManager,
 } from './discret-evaluation.api';
@@ -15,6 +16,7 @@ import { faUserSecret, faArrowRight, faCheck, faRedo, faTrophy } from '@fortawes
 import { useAppSelector } from 'app/config/store';
 import { IEmployee } from 'app/shared/model/employee.model';
 import { ITest } from 'app/shared/model/test.model';
+import { useSearchParams } from 'react-router';
 
 type EvaluationStep = 'start' | 'questions' | 'done';
 
@@ -327,6 +329,7 @@ const DoneStep = ({ message, result, onRestart }: IDoneStepProps) => {
 
 const DiscretEvaluation = () => {
   const account = useAppSelector(state => state.authentication.account);
+  const [searchParams] = useSearchParams();
 
   // State: wizard step
   const [step, setStep] = useState<EvaluationStep>('start');
@@ -370,6 +373,32 @@ const DiscretEvaluation = () => {
     const authenticatedManager = employees.find(emp => emp.email?.toLowerCase() === account?.email?.toLowerCase()) ?? null;
     setManager(authenticatedManager);
   }, [account?.email, employees]);
+
+  // Handle resume from URL parameter ?resume=<evaluationId>
+  useEffect(() => {
+    const resumeId = searchParams.get('resume');
+    if (!resumeId) return;
+    const doResume = async () => {
+      setStartLoading(true);
+      setError('');
+      try {
+        const res = await resumeEvaluation(Number(resumeId));
+        setEvaluationId(res.data.evaluation.id);
+        setQuestions(res.data.questions);
+        setCurrentIndex(res.data.resumeIndex);
+        resetQuestionState();
+        setStep('questions');
+        setMessage(`Évaluation reprise à la question ${res.data.resumeIndex + 1}/${res.data.questions.length}.`);
+      } catch (e: any) {
+        const msg =
+          e.response?.data?.detail || e.response?.data?.message || e.response?.data?.title || "Erreur lors de la reprise de l'évaluation";
+        setError(msg);
+      } finally {
+        setStartLoading(false);
+      }
+    };
+    doResume();
+  }, [searchParams]);
 
   const resetQuestionState = () => {
     setContenu('');
